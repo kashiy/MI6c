@@ -26,6 +26,7 @@ public abstract class Subscriber extends RunnableSubPub {
     public Subscriber(String name) {
         super(name);
         messageBroker = MessageBrokerImpl.getInstance();
+        messageBroker.register(this);//create the queue in the massgebroker.
     }
 
     /**
@@ -49,8 +50,12 @@ public abstract class Subscriber extends RunnableSubPub {
      *                 {@code type} are taken from this Subscriber message
      *                 queue.
      */
-    protected final <T, E extends Event<T>> void subscribeEvent(Class<E> type, Callback<E> callback) {
+
+    protected final <T, E extends Event<T>> void subscribeEvent(Class<E> type, Callback<E> callback) throws InterruptedException {
         messageBroker.subscribeEvent(type,this);
+        Message newMessageRecieved= messageBroker.awaitMessage(this);
+        //check about the messgeloop.
+
     }
 
     /**

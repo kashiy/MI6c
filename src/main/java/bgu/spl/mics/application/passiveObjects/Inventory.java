@@ -20,7 +20,6 @@ public class Inventory {
 	}
 
 	public static Inventory getInstance() {
-
 		return SingeltonHolder2.instance;
 	}
 
@@ -32,7 +31,9 @@ public class Inventory {
      * 						of the inventory.
      */
 	public void load (String[] inventory) {
-		//TODO: Implement this
+		for(int i = 0;i<inventory.length;i++){
+			gadgets.add(inventory[i]);
+		}
 	}
 	
 	/**
@@ -42,7 +43,9 @@ public class Inventory {
      * @return 	‘false’ if the gadget is missing, and ‘true’ otherwise
      */
 	public boolean getItem(String gadget){
-		//TODO: Implement this
+		for( i:gadgets){
+
+		}
 		return true;
 	}
 

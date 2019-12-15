@@ -15,9 +15,13 @@ public class Inventory {
 	/**
      * Retrieves the single instance of this class.
      */
+	private static class SingeltonHolder2{
+		private static Inventory instance = new Inventory();
+	}
+
 	public static Inventory getInstance() {
-		//TODO: Implement this
-		return null;
+
+		return SingeltonHolder2.instance;
 	}
 
 	/**

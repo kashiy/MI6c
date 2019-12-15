@@ -53,7 +53,7 @@ public abstract class Subscriber extends RunnableSubPub {
 
     protected final <T, E extends Event<T>> void subscribeEvent(Class<E> type, Callback<E> callback) throws InterruptedException {
         messageBroker.subscribeEvent(type,this);
-        Message newMessageRecieved= messageBroker.awaitMessage(this);
+        //Message newMessageRecieved= messageBroker.awaitMessage(this);
         //check about the messgeloop.
 
     }
@@ -112,6 +112,9 @@ public abstract class Subscriber extends RunnableSubPub {
     public final void run() {
         initialize();
         while (!terminated) {
+         //   Message newMessageRecieved= messageBroker.awaitMessage(this);
+            //wait for furom answer for the map of message/callbacks.
+
             System.out.println("NOT IMPLEMENTED!!!"); //TODO: you should delete this line :)
         }
     }

@@ -43,10 +43,11 @@ public class Inventory {
      * @return 	‘false’ if the gadget is missing, and ‘true’ otherwise
      */
 	public boolean getItem(String gadget){
-		for( i:gadgets){
-
+		for( String item : gadgets){
+			if(item.compareTo(gadget)==0)
+				return true;
 		}
-		return true;
+		return false;
 	}
 
 	/**

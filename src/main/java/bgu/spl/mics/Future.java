@@ -16,7 +16,7 @@ public class Future<T> {
 	 * This should be the the only public constructor in this class.
 	 */
 	public Future() {
-		//TODO: implement this
+		reasolvedVal=null;
 	}
 	
 	/**
@@ -27,26 +27,29 @@ public class Future<T> {
      * @return return the result of type T if it is available, if not wait until it is available.
      * 	       
      */
-	public T get() {
-		//TODO: implement this.
-		return null;
+	public synchronized T get() throws InterruptedException {//check synchronized
+		while(!isDone())
+			wait();
+		return reasolvedVal;
 	}
 	
 	/**
      * Resolves the result of this Future object.
      */
-	public void resolve (T result) {
-		//TODO: implement this.
+	public synchronized void resolve (T result) {//check synchronized
+		reasolvedVal =result;
+		notifyAll();
 	}
 	
 	/**
      * @return true if this object has been resolved, false otherwise
      */
 	public boolean isDone() {
-		//TODO: implement this.
-		return false;
+		if (reasolvedVal == null) {
+			return false;
+		}
+		return true;
 	}
-	
 	/**
      * retrieves the result the Future object holds if it has been resolved,
      * This method is non-blocking, it has a limited amount of time determined
@@ -59,8 +62,18 @@ public class Future<T> {
      *         elapsed, return null.
      */
 	public T get(long timeout, TimeUnit unit) {
-		//TODO: implement this.
-		return null;
+		if(!isDone()){
+			long startTime = System.currentTimeMillis();
+			long waitingInTimeUnite = TimeUnit.MILLISECONDS.convert(timeout,unit);
+			long endTime = startTime + waitingInTimeUnite;
+			while(System.currentTimeMillis() != endTime) {
+				if (isDone()) {
+					return reasolvedVal;
+				}
+			}
+			return null;
+		}
+		return reasolvedVal;
 	}
 
 }

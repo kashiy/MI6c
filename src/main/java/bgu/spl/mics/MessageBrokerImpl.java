@@ -7,12 +7,22 @@ package bgu.spl.mics;
  */
 public class MessageBrokerImpl implements MessageBroker {
 
+	private static class SingeltonHolder{
+		private static MessageBrokerImpl instance = new MessageBrokerImpl();
+	}
+
+	//need to IMPL
+	private MessageBrokerImpl(){
+
+
+
+	}
+
 	/**
 	 * Retrieves the single instance of this class.
 	 */
 	public static MessageBroker getInstance() {
-		//TODO: Implement this
-		return null;
+		return SingeltonHolder.instance;
 	}
 
 	@Override

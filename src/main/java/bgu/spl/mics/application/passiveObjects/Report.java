@@ -9,6 +9,18 @@ import java.util.List;
  * You may add ONLY private fields and methods to this class.
  */
 public class Report {
+
+	String missionName;
+	int mSerialNumber;
+	int moneyPennySerialNumber;
+	List<String> agentsSerialNumbers;
+	List<String> agentsNames;
+	String gadgetName;
+	int timeIssued;
+	int QTime;
+	int timeCreated;
+
+
 	/**
      * Retrieves the mission name.
      */

@@ -1,6 +1,7 @@
 package bgu.spl.mics;
 
 import java.util.*;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * The {@link MessageBrokerImpl class is the implementation of the MessageBroker interface.
@@ -8,7 +9,8 @@ import java.util.*;
  * Only private fields and methods can be added to this class.
  */
 public class MessageBrokerImpl implements MessageBroker {
-	Map<Message, Queue> messageListMap;
+	Map<Message, BlockingQueue> messageBlockingQueueOfSubscribersMap;
+	Map<Subscriber,BlockingQueue> subscriberBlockingQueueOfMessagesMap;
 
 
 	private static class SingeltonHolder{

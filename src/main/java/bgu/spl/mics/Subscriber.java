@@ -17,7 +17,7 @@ package bgu.spl.mics;
  */
 public abstract class Subscriber extends RunnableSubPub {
     private boolean terminated = false;
-     MessageBroker messageBroker;
+    MessageBroker messageBroker;
 
     /**
      * @param name the Subscriber name (used mainly for debugging purposes -
@@ -52,7 +52,7 @@ public abstract class Subscriber extends RunnableSubPub {
      */
 
     protected final <T, E extends Event<T>> void subscribeEvent(Class<E> type, Callback<E> callback) throws InterruptedException {
-       // messageBroker.subscribeEvent(type,this);
+         messageBroker.subscribeEvent(type,this);
         //Message newMessageRecieved= messageBroker.awaitMessage(this);
         //check about the messgeloop.
 

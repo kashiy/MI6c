@@ -9,3 +9,4 @@ out
 gen
 .gitignore
 src/main/java/bgu/spl/mics/.DS_Store
+misc.xml

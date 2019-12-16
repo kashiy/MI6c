@@ -10,37 +10,35 @@ import java.util.List;
  */
 public class Report {
 
-	String missionNAme;
+	String missionName;
 	int mSerialNumber;
 	int moneyPennySerialNumber;
 	List<String> agentsSerialNumbers;
-	List<String> agentsNAmes;
-	String gadgetNAme;
-	int timeISsued;
+	List<String> agentsNames;
+	String gadgetName;
+	int timeIssued;
 	int QTime;
-	int timeCreateD;
+	int timeCreated;
 
 
 	/**
      * Retrieves the mission name.
      */
 	public String getMissionName() {
-
-		return missionNAme;
+		return missionName;
 	}
 
 	/**
 	 * Sets the mission name.
 	 */
 	public void setMissionName(String missionName) {
-		missionNAme=missionName;
+		this.missionName=missionName;
 	}
 
 	/**
 	 * Retrieves the M's id.
 	 */
 	public int getM() {
-
 		return mSerialNumber;
 	}
 
@@ -55,7 +53,6 @@ public class Report {
 	 * Retrieves the Moneypenny's id.
 	 */
 	public int getMoneypenny() {
-
 		return moneyPennySerialNumber;
 	}
 
@@ -72,7 +69,6 @@ public class Report {
 	 * @return The serial numbers of the agents.
 	 */
 	public List<String> getAgentsSerialNumbersNumber() {
-
 		return agentsSerialNumbers;
 	}
 
@@ -89,15 +85,14 @@ public class Report {
 	 * @return The agents names.
 	 */
 	public List<String> getAgentsNames() {
-
-		return agentsNAmes;
+		return agentsNames;
 	}
 
 	/**
 	 * Sets the agents names.
 	 */
 	public void setAgentsNames(List<String> agentsNames) {
-		agentsNAmes=agentsNames;
+		this.agentsNames=agentsNames;
 	}
 
 	/**
@@ -106,22 +101,20 @@ public class Report {
 	 * @return the name of the gadget.
 	 */
 	public String getGadgetName() {
-
-		return gadgetNAme;
+		return gadgetName;
 	}
 
 	/**
 	 * Sets the name of the gadget.
 	 */
 	public void setGadgetName(String gadgetName) {
-		gadgetNAme=gadgetName;
+		this.gadgetName=gadgetName;
 	}
 
 	/**
 	 * Retrieves the time-tick in which Q Received the GadgetAvailableEvent for that mission.
 	 */
 	public int getQTime() {
-
 		return QTime;
 	}
 
@@ -136,29 +129,27 @@ public class Report {
 	 * Retrieves the time when the mission was sent by an Intelligence Publisher.
 	 */
 	public int getTimeIssued() {
-
-		return timeISsued;
+		return timeIssued;
 	}
 
 	/**
 	 * Sets the time when the mission was sent by an Intelligence Publisher.
 	 */
 	public void setTimeIssued(int timeIssued) {
-		timeISsued= timeIssued;
+		this.timeIssued= timeIssued;
 	}
 
 	/**
 	 * Retrieves the time-tick when the report has been created.
 	 */
 	public int getTimeCreated() {
-
-		return timeCreateD;
+		return timeCreated;
 	}
 
 	/**
 	 * Sets the time-tick when the report has been created.
 	 */
 	public void setTimeCreated(int timeCreated) {
-		timeCreateD=timeCreated;
+		this.timeCreated=timeCreated;
 	}
 }

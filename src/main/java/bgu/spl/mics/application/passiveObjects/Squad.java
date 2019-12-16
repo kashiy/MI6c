@@ -1,6 +1,7 @@
 package bgu.spl.mics.application.passiveObjects;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -99,8 +100,11 @@ public class Squad {
      * @return a list of the names of the agents with the specified serials.
      */
     public List<String> getAgentsNames(List<String> serials){
-        // TODO Implement this
-	    return null;
+		List<String> agentsNames= new LinkedList<String>();
+		for(String serial: serials) {
+			agentsNames.add(agentsMAP.get(serial).getName());
+		}
+		return agentsNames;
     }
 
 }

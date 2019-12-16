@@ -28,7 +28,7 @@ public class ExampleEventHandlerSubscriber extends Subscriber {
     @Override
     protected void initialize() {
         System.out.println("Event Handler " + getName() + " started");
-        
+      /*
         subscribeEvent(ExampleEvent.class, ev -> {//callback
             mbt--;
             System.out.println("Event Handler " + getName() + " got a new event from " + ev.getSenderName() + "! (mbt: " + mbt + ")");
@@ -38,6 +38,8 @@ public class ExampleEventHandlerSubscriber extends Subscriber {
                 terminate();
             }
         });
+
+       */
     }
 
 }

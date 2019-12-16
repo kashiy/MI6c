@@ -57,6 +57,11 @@ public class Inventory {
 	 * list of all the of the gadgeds.
 	 * This method is called by the main method in order to generate the output.
 	 */
+	public List<String> getGadgets(){
+		return gadgets;
+	}
+
+
 	public void printToFile(String filename){
 		//TODO: Implement this
 	}

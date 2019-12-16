@@ -52,7 +52,7 @@ public abstract class Subscriber extends RunnableSubPub {
      */
 
     protected final <T, E extends Event<T>> void subscribeEvent(Class<E> type, Callback<E> callback) throws InterruptedException {
-        messageBroker.subscribeEvent(type,this);
+       // messageBroker.subscribeEvent(type,this);
         //Message newMessageRecieved= messageBroker.awaitMessage(this);
         //check about the messgeloop.
 

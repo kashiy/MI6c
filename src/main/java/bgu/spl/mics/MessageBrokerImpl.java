@@ -2,6 +2,7 @@ package bgu.spl.mics;
 
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -13,6 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class MessageBrokerImpl implements MessageBroker {
 	Map<Class<Message>, BlockingQueue> messageMap; //register to type of message - round robin
 	Map<Subscriber,BlockingQueue> subscriberMap; //missions
+	Map<Message,Future> futureMap;
 	private AtomicBoolean createMessageQ;
 
 	private static class SingletonHolder{
@@ -21,8 +23,9 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	//need to IMPL
 	private MessageBrokerImpl(){
-		messageMap = new HashMap<Class<Message>, BlockingQueue>();
-		subscriberMap = new HashMap<Subscriber,BlockingQueue>();
+		messageMap = new ConcurrentHashMap<Class<Message>, BlockingQueue>();
+		subscriberMap = new ConcurrentHashMap<Subscriber,BlockingQueue>();
+		futureMap = new ConcurrentHashMap<Message,Future>();
 
 
 	}
@@ -37,15 +40,15 @@ public class MessageBrokerImpl implements MessageBroker {
 
 
 	@Override
-	public <T> void subscribeEvent(Class<? extends Event<T>> type, Subscriber m) {
+	public <T> void subscribeEvent(Class<? extends Event<T>> type, Subscriber m) throws InterruptedException {
 		BlockingQueue<Subscriber> queueMessage= messageMap.get(type);
-		queueMessage.add(m);
+		queueMessage.put(m);
 	}
 
 	@Override
-	public void subscribeBroadcast(Class<? extends Broadcast> type, Subscriber m) {
+	public void subscribeBroadcast(Class<? extends Broadcast> type, Subscriber m) throws InterruptedException {
 		BlockingQueue<Subscriber> queueMessage= messageMap.get(type);
-		queueMessage.add(m);
+		queueMessage.put(m);
 
 	}
 
@@ -60,24 +63,46 @@ public class MessageBrokerImpl implements MessageBroker {
 	 * creates the messageQueue for this type
 	 * @param type The type to subscribe to
 	 */
-	private void createMessageQueue(Class<Message> type){
-		BlockingQueue<Subscriber> subscriberBlockingQueue= new LinkedBlockingQueue<Subscriber>();
-		messageMap.put(type,subscriberBlockingQueue);
+	private void createMessageQueue(Class<? extends Message> type){
+
 	}
 
+
+	/**
+	 * Adds the {@link Broadcast} {@code b} to the message queues of all the
+	 * Subscriber subscribed to {@code b.getClass()}.
+	 * <p>
+	 * @param b 	The message to added to the queues.
+	 */
 	@Override
-	public void sendBroadcast(Broadcast b) {
-		// TODO Auto-generated method stub
+	public void sendBroadcast(Broadcast b) throws InterruptedException {
+		if(!messageMap.containsKey((Class<Message>) b.getClass())) { //just for not creating a queue for every broadcast
+			BlockingQueue<Subscriber> subscriberBlockingQueue = new LinkedBlockingQueue<Subscriber>();
+			messageMap.putIfAbsent((Class<Message>) b.getClass(), subscriberBlockingQueue);
+		}
+
+		BlockingQueue<Subscriber> queueMessage= messageMap.get(b.getClass()); //get queue
+
+		for (Subscriber subscriberRegistered : queueMessage) {
+			subscriberMap.get(subscriberRegistered).put(b); // add the broadcast to the subscribers
+		}
 
 	}
 
 	
 	@Override
-	public <T> Future<T> sendEvent(Event<T> e) {
-		do{
-			createMessageQ = false;
+	public synchronized <T> Future<T> sendEvent(Event<T> e) throws InterruptedException {
+		if(!messageMap.containsKey((Class<Message>) e.getClass())) { //just for not creating a queue for every broadcast
+			BlockingQueue<Subscriber> subscriberBlockingQueue = new LinkedBlockingQueue<Subscriber>();
+			messageMap.putIfAbsent((Class<Message>) e.getClass(), subscriberBlockingQueue);
 		}
-		return null;
+		// TODO semaphore
+		BlockingQueue<Subscriber> queueMessage= messageMap.get(e.getClass()); //get queue of subscribers to event<T>
+		Subscriber tempGetSubscriber = queueMessage.take(); //remove head of the queue
+		subscriberMap.get(tempGetSubscriber).put(e);
+		queueMessage.put(tempGetSubscriber); //add to end of the queue - round robin
+		// TODO add to hashmap
+		return new Future<T>();
 	}
 
 	@Override
@@ -89,7 +114,7 @@ public class MessageBrokerImpl implements MessageBroker {
 	@Override
 	public void unregister(Subscriber m) {
 		if(subscriberMap.containsKey(m)) {
-			subscriberMap.remove(m); //delete the subscriberw's queue
+			subscriberMap.remove(m); //delete the subscriber's queue
 			for (BlockingQueue messageQueue : messageMap.values()) {
 				if (messageQueue.contains(m)) {
 					messageQueue.remove(m);

@@ -18,7 +18,7 @@ public interface MessageBroker {
      * @param type The type to subscribe to,
      * @param s    The subscribing Subscriber.
      */
-    <T> void subscribeEvent(Class<? extends Event<T>> type, Subscriber s);
+    <T> void subscribeEvent(Class<? extends Event<T>> type, Subscriber s) throws InterruptedException;
 
     /**
      * Subscribes {@code m} to receive {@link Broadcast}s of type {@code type}.
@@ -26,7 +26,7 @@ public interface MessageBroker {
      * @param type 	The type to subscribe to.
      * @param s    	The Subscriber.
      */
-    void subscribeBroadcast(Class<? extends Broadcast> type, Subscriber s);
+    void subscribeBroadcast(Class<? extends Broadcast> type, Subscriber s) throws InterruptedException;
 
     /**
      * Notifies the MessageBroker that the event {@code e} is completed and its
@@ -46,7 +46,7 @@ public interface MessageBroker {
      * <p>
      * @param b 	The message to added to the queues.
      */
-    void sendBroadcast(Broadcast b);
+    void sendBroadcast(Broadcast b) throws InterruptedException;
 
     /**
      * Adds the {@link Event} {@code e} to the message queue of one of the
@@ -58,7 +58,7 @@ public interface MessageBroker {
      * @return {@link Future<T>} object to be resolved once the processing is complete,
      * 	       null in case no Subscriber has subscribed to {@code e.getClass()}.
      */
-    <T> Future<T> sendEvent(Event<T> e);
+    <T> Future<T> sendEvent(Event<T> e) throws InterruptedException;
 
     /**
      * Allocates a message-queue for the {@link Subscriber} {@code m}.

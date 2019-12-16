@@ -5,6 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.Thread.sleep;
+
+
+
 /**
  * Passive data-object representing a information about an agent in MI6.
  * You must not alter any of the given public methods of this class. 
@@ -57,8 +61,9 @@ public class Squad {
 	 * simulates executing a mission by calling sleep.
 	 * @param time   time ticks to sleep
 	 */
-	public void sendAgents(List<String> serials, int time){
-		// TODO Implement this
+	public void sendAgents(List<String> serials, int time) throws InterruptedException { //we know that time-tick every 100 milliseconds
+		sleep(time*100);
+		releaseAgents(serials);   //no need to sync because only the threads with the agents available will come here. so we think we dont have deadlock because when time pass we then release the agents
 	}
 
 	/**

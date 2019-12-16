@@ -1,11 +1,15 @@
 package bgu.spl.mics;
 
+import java.util.*;
+
 /**
  * The {@link MessageBrokerImpl class is the implementation of the MessageBroker interface.
  * Write your implementation here!
  * Only private fields and methods can be added to this class.
  */
 public class MessageBrokerImpl implements MessageBroker {
+	Map<Message, Queue> messageListMap;
+
 
 	private static class SingeltonHolder{
 		private static MessageBrokerImpl instance = new MessageBrokerImpl();

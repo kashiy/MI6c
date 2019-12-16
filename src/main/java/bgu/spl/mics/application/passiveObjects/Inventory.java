@@ -63,6 +63,6 @@ public class Inventory {
 
 
 	public void printToFile(String filename){
-		//TODO: Implement this
+
 	}
 }

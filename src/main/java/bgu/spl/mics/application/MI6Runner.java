@@ -15,6 +15,9 @@ import java.util.Collection;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -35,9 +38,11 @@ public class MI6Runner {
         System.out.println(anotherStr[1]);
 
 */
-     //   Gson gson = new Gson();
-       // BufferedReader br = new BufferedReader(new FileReader(
-         //     "C:\\Users\\Yakir\\Desktop\\MI6c\\input201 - 2.json"));
+      List<String> as = new LinkedList<>();
+
+       Gson gson = new Gson();
+        FileReader br = new FileReader(
+              "C:\\Users\\Yakir\\Desktop\\MI6c\\input201 - 2.json");
       ;
        // for (int i = 0; i < jsonArray.size(); i++) {
          //   JsonElement str = gson.get(1);

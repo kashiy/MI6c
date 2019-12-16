@@ -10,15 +10,15 @@ import java.util.List;
  */
 public class Report {
 
-	String missionName;
-	int mSerialNumber;
-	int moneyPennySerialNumber;
-	List<String> agentsSerialNumbers;
-	List<String> agentsNames;
-	String gadgetName;
-	int timeIssued;
-	int QTime;
-	int timeCreated;
+	private String missionName;
+	private int mSerialNumber;
+	private int moneyPennySerialNumber;
+	private List<String> agentsSerialNumbers;
+	private List<String> agentsNames;
+	private String gadgetName;
+	private int timeIssued;
+	private int QTime;
+	private int timeCreated;
 
 
 	/**

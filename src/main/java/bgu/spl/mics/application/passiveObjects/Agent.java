@@ -7,9 +7,9 @@ package bgu.spl.mics.application.passiveObjects;
  * You may add ONLY private fields and methods to this class.
  */
 public class Agent {
-	String serialNumber;
-	String name;
-	Boolean available=true;
+	private String serialNumber;
+	private String name;
+	private Boolean available=true;
 
 	/**
 	 * Sets the serial number of an agent.

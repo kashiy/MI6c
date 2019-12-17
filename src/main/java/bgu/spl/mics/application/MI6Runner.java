@@ -21,7 +21,7 @@ import com.google.gson.JsonParser;
 public class MI6Runner {
     public static void main(String[] args) {
         try {
-            //Json
+             //Json
             FileReader reader = new FileReader(
                     "C:\\Users\\Yakir\\Desktop\\MI6c\\src\\input201 - 2.json");
             JsonElement jsonElement = new JsonParser().parse(reader);
@@ -59,6 +59,7 @@ public class MI6Runner {
 
             //services
             int M =  jsonObject.get("services").getAsJsonObject().get("M").getAsInt();
+            int time =  jsonObject.get("services").getAsJsonObject().get("time").getAsInt(); //TODO put in time service
             int Moneypenny  = jsonObject.get("services").getAsJsonObject().get("Moneypenny").getAsInt();
             JsonArray intelligenceMissions =  jsonObject.get("services").getAsJsonObject().get("intelligence").getAsJsonArray();
             List<MissionInfo> intelligenceMissionsList = new LinkedList<>();

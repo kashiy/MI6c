@@ -123,14 +123,12 @@ public class MessageBrokerImpl implements MessageBroker {
 		if(!subscriberMap.containsKey(m)){
 			throw new IllegalStateException("The subscriber was never registered.");
 		}
-		try {
+
 
 			BlockingQueue<Message> mQueue = subscriberMap.get(m);
 			return mQueue.take();
-		}
-		catch(InterruptedException ignored){ //should we return null? the take will throw exception - if interrupted while waiting
-			return null; //*@#$(%*@(_$%* need to fix in the messgae loop accordingly
-		}
+
+
 	}
 
 	

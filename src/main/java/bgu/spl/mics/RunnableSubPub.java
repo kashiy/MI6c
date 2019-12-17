@@ -7,7 +7,7 @@ abstract class RunnableSubPub implements Runnable {
     /**
      * this method is called once when the event loop starts.
      */
-    protected abstract void initialize();
+    protected abstract void initialize() throws InterruptedException;
 
     /**
      * @param name the Publisher/Subscriber name (used mainly for debugging purposes -
@@ -32,7 +32,7 @@ abstract class RunnableSubPub implements Runnable {
      */
     @Override
     public abstract void run();
-
+            //TODO ask people if we can ignore this
     /**
      * @return the simple publisher
      */

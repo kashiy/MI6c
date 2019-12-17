@@ -100,9 +100,9 @@ public class MissionInfo {
 		return duration;
 	}
 
-	/*public String toString() {
+	public String toString() {
 		String str = getMissionName() + " " + getGadget();
 		return str;
 	}
-	 */
+
 }

@@ -59,9 +59,6 @@ public abstract class Subscriber extends RunnableSubPub {
     protected final <T, E extends Event<T>> void subscribeEvent(Class<E> type, Callback<E> callback) throws InterruptedException {
          messageBroker.subscribeEvent(type,this);
         callbackMap.putIfAbsent(type,callback);
-        //Message newMessageRecieved= messageBroker.awaitMessage(this);
-        //check about the messgeloop.
-
     }
 
     /**
@@ -84,8 +81,9 @@ public abstract class Subscriber extends RunnableSubPub {
      *                 {@code type} are taken from this Subscriber message
      *                 queue.
      */
-    protected final <B extends Broadcast> void subscribeBroadcast(Class<B> type, Callback<B> callback) {
-        //TODO: implement this.
+    protected final <B extends Broadcast> void subscribeBroadcast(Class<B> type, Callback<B> callback) throws InterruptedException {
+        messageBroker.subscribeBroadcast(type,this);
+        callbackMap.putIfAbsent(type,callback);
     }
 
     /**
@@ -99,7 +97,7 @@ public abstract class Subscriber extends RunnableSubPub {
      *               {@code e}.
      */
     protected final <T> void complete(Event<T> e, T result) {
-        //TODO: implement this.
+       messageBroker.complete(e,result);
     }
 
     /**
@@ -111,18 +109,35 @@ public abstract class Subscriber extends RunnableSubPub {
     }
 
     /**
-     * The entry point of the Subscriber. TODO: you must complete this code
+     * The entry point of the Subscriber.
      * otherwise you will end up in an infinite loop.
      */
     @Override
     public final void run() {
-        initialize();
-        while (!terminated) {
-         //   Message newMessageRecieved= messageBroker.awaitMessage(this);
-            //wait for furom answer for the map of message/callbacks.
-
-            System.out.println("NOT IMPLEMENTED!!!"); //TODO: you should delete this line :)
+        try {
+            initialize(); //do the subscribeevent/broadcast
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-    }
+        while (!terminated) {
+            try{
 
+                Message newMessageRecieved= messageBroker.awaitMessage(this);
+                if(Broadcast.class.isAssignableFrom(newMessageRecieved.getClass())){
+                    //TODO change time
+                }
+                else{
+                    callbackMap.get(newMessageRecieved.getClass()).call(newMessageRecieved);
+                }
+            }
+
+            catch(InterruptedException ignored){
+                terminate();
+            }
+
+            }
+
+        }
 }
+
+

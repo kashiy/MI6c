@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -12,10 +13,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Only private fields and methods can be added to this class.
  */
 public class MessageBrokerImpl implements MessageBroker {
-	Map<Class<Message>, BlockingQueue> messageMap; //register to type of message - round robin
-	Map<Subscriber,BlockingQueue> subscriberMap; //missions
-	Map<Message,Future> futureMap;
-	private AtomicBoolean createMessageQ;
+	private Map<Class<? extends Message>, BlockingQueue> messageMap; //register to type of message - round robin
+	private Map<Subscriber,BlockingQueue> subscriberMap; //missions
+	private Map<Message,Future> futureMap;
+	private Semaphore sem;
 
 	private static class SingletonHolder{
 		private static MessageBrokerImpl instance = new MessageBrokerImpl();
@@ -23,11 +24,10 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	//need to IMPL
 	private MessageBrokerImpl(){
-		messageMap = new ConcurrentHashMap<Class<Message>, BlockingQueue>();
+		messageMap = new ConcurrentHashMap<Class<? extends Message>, BlockingQueue>();
 		subscriberMap = new ConcurrentHashMap<Subscriber,BlockingQueue>();
 		futureMap = new ConcurrentHashMap<Message,Future>();
-
-
+		sem= new Semaphore(1);
 	}
 
 	/**
@@ -66,9 +66,9 @@ public class MessageBrokerImpl implements MessageBroker {
 	 */
 	@Override
 	public void sendBroadcast(Broadcast b) throws InterruptedException { //TODO check try & catch
-		if(!messageMap.containsKey((Class<Message>) b.getClass())) { //just for not creating a queue for every broadcast
+		if(!messageMap.containsKey(b.getClass())) { //just for not creating a queue for every broadcast
 			BlockingQueue<Subscriber> subscriberBlockingQueue = new LinkedBlockingQueue<Subscriber>();
-			messageMap.putIfAbsent((Class<Message>) b.getClass(), subscriberBlockingQueue);
+			messageMap.putIfAbsent(b.getClass(), subscriberBlockingQueue);
 		}
 
 		BlockingQueue<Subscriber> queueMessage= messageMap.get(b.getClass()); //get queue
@@ -81,12 +81,12 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	
 	@Override
-	public synchronized <T> Future<T> sendEvent(Event<T> e) throws InterruptedException { //TODO check sync for more options //TODO check try & catch
-		if(!messageMap.containsKey((Class<Message>) e.getClass())) { //just for not creating a queue for every broadcast
+	public <T> Future<T> sendEvent(Event<T> e) throws InterruptedException { //TODO check try & catch
+		if(!messageMap.containsKey(e.getClass())) { //just for not creating a queue for every broadcast
 			BlockingQueue<Subscriber> subscriberBlockingQueue = new LinkedBlockingQueue<Subscriber>();
-			messageMap.putIfAbsent((Class<Message>) e.getClass(), subscriberBlockingQueue);
+			messageMap.putIfAbsent(e.getClass(), subscriberBlockingQueue);
 		}
-
+		sem.acquire();
 		BlockingQueue<Subscriber> queueMessage= messageMap.get(e.getClass()); //get queue of subscribers to event<T>
 		if(!queueMessage.isEmpty()) {
 			Subscriber tempGetSubscriber = queueMessage.take(); //remove head of the queue
@@ -96,6 +96,7 @@ public class MessageBrokerImpl implements MessageBroker {
 			futureMap.put(e, newFuture);
 			return newFuture;
 		}
+		sem.release();
 		return null;
 	}
 

@@ -1,6 +1,12 @@
 package bgu.spl.mics.application.passiveObjects;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
+
 
 /**
  *  That's where Q holds his gadget (e.g. an explosive pen was used in GoldenEye, a geiger counter in Dr. No, etc).
@@ -15,12 +21,18 @@ public class Inventory {
 	/**
      * Retrieves the single instance of this class.
      */
+
 	private static class SingeltonHolder2{
 		private static Inventory instance = new Inventory();
 	}
 
+	private Inventory(){
+		gadgets = new LinkedList<>();
+	}
+
 	public static Inventory getInstance() {
 		return SingeltonHolder2.instance;
+
 	}
 
 	/**
@@ -30,9 +42,9 @@ public class Inventory {
      * @param inventory 	Data structure containing all data necessary for initialization
      * 						of the inventory.
      */
-	public void load (String[] inventory) {
-		for(int i = 0;i<inventory.length;i++){
-			gadgets.add(inventory[i]);
+	public void load(String[] inventory) {
+		for(int j = 0;j<inventory.length;j++){
+			gadgets.add(inventory[j]);
 		}
 	}
 	
@@ -62,7 +74,20 @@ public class Inventory {
 	}
 
 
-	public void printToFile(String filename){
 
+
+
+	public void printToFile(String filename) {
+
+		JsonArray obj = new JsonArray();
+		for(String gadget : gadgets)
+			obj.add(gadget);
+
+		try(FileWriter file = new FileWriter(filename)) {
+			//file.write(obj.toJSONString());
+
+		} catch (IOException ex) {//error
+			ex.printStackTrace();
+		}
 	}
 }

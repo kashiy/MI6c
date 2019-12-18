@@ -95,7 +95,7 @@ public class MI6Runner {
                     //TODO - create intelligence
                 }
             }
-
+                    //Todo - we need to create the threadpool/thread
         } catch (Exception ex) {
             ex.printStackTrace();
         }

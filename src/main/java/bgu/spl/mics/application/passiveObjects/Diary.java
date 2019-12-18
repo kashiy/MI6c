@@ -23,7 +23,7 @@ public class Diary {
 		private static Diary instance = new Diary();
 	}
 
-	//TODO need to IMPL
+
 	private Diary(){
 		reports = new CopyOnWriteArrayList<Report>();
 		total=0;
@@ -56,7 +56,7 @@ public class Diary {
 	 * List of all the reports in the diary.
 	 * This method is called by the main method in order to generate the output.
 	 */
-	public void printToFile(String filename){
+	public void printToFile(String filename){ //TODO YAKIR
 
 	}
 

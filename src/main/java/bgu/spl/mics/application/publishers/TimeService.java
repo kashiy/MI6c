@@ -15,18 +15,24 @@ import java.util.concurrent.TimeUnit;
  * You MAY change constructor signatures and even add new public constructors.
  */
 public class TimeService extends Publisher {
-	private int duration;
+	private int duration; //lasttimetick
 	private int currentTime = 0 ;
+	String senderId;
+	private int timeToTerminate;
 
 
-	public TimeService(int duration) {
+
+
+	public TimeService(String senderId, int duration) {
 		super("Change_This_Name");
+		this.senderId=senderId;
 		this.duration=duration;
+		this.timeToTerminate=duration;
 	}
 
 	@Override
 	protected void initialize() throws InterruptedException {
-		getSimplePublisher().sendBroadcast(new TickBroadcast(currentTime));
+		getSimplePublisher().sendBroadcast(new TickBroadcast(senderId,currentTime,timeToTerminate));
 		
 	}
 

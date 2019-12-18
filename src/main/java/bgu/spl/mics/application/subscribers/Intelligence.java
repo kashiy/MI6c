@@ -24,12 +24,14 @@ public class Intelligence extends Subscriber {
 
 	private List<MissionInfo> myMissions;
 	private int currentTimeTick;
+	private String senderId;
 
 
-	public Intelligence(String name, List<MissionInfo> myMissions) {
+	public Intelligence(String name, List<MissionInfo> myMissions, String senderId) {
 		super(name); //constructor of subscriber registers on the messagebroker
 		this.myMissions=myMissions;
 		this.currentTimeTick=0;
+		this.senderId=senderId;
 
 	}
 
@@ -45,9 +47,12 @@ public class Intelligence extends Subscriber {
 			System.out.println("Listener " + getName() + " got a new message from " + message.getSenderId() + "! (currentTimeTick: " + currentTimeTick + ")");
 			for (MissionInfo mission: myMissions){
 				if(mission.getTimeIssued()<= currentTimeTick) {
-					this.getSimplePublisher().sendEvent(new MissionReceivedEvent(getName(), mission));
+					Future<Boolean> future = this.getSimplePublisher().sendEvent(new MissionReceivedEvent(getName(), senderId, mission));
 					myMissions.remove(mission);
 				}
+			}
+			if(currentTimeTick > message.getTimeToTerminate()){
+				terminate();
 			}
 		});
 

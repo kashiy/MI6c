@@ -47,6 +47,8 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public void subscribeBroadcast(Class<? extends Broadcast> type, Subscriber m) throws InterruptedException { //TODO check try & catch
+		//TODO all in sync
+
 		BlockingQueue<Subscriber> queueMessage= messageMap.get(type);
 		queueMessage.put(m);
 

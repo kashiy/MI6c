@@ -68,7 +68,7 @@ public class MI6Runner {
             JsonArray intelligenceMissions =  jsonObject.get("services").getAsJsonObject().get("intelligence").getAsJsonArray();
             List<MissionInfo> intelligenceMissionsList = new LinkedList<>();
             for (JsonElement element1 : intelligenceMissions ){
-                JsonArray mission = element1.getAsJsonObject().get("missions").getAsJsonArray();
+                JsonArray mission = element1.getAsJsonObject().get("missions").getAsJsonArray(); //TODO two intelligence - each one will get the missions
                 for (JsonElement element2 : mission )
                 {
                     JsonArray serialAgentsNumbers = element2.getAsJsonObject().get("serialAgentsNumbers").getAsJsonArray();
@@ -91,6 +91,8 @@ public class MI6Runner {
                     missionCreated.setTimeExpired(timeExpired);
                     missionCreated.setTimeIssued(timeIssued);
                     intelligenceMissionsList.add(missionCreated);
+
+                    //TODO - create intelligence
                 }
             }
 

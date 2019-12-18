@@ -23,7 +23,7 @@ public class MI6Runner {
         try {
              //Json
             FileReader reader = new FileReader(
-                    "C:\\Users\\Yakir\\Desktop\\MI6c\\src\\input201 - 2.json");
+                    "/users/studs/bsc/2020/kashiy/IdeaProjects/MI6c/src/input201 - 2.json");
             JsonElement jsonElement = new JsonParser().parse(reader);
             JsonObject jsonObject = jsonElement.getAsJsonObject();
 

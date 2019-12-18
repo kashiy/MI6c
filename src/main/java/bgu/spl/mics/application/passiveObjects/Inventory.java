@@ -57,6 +57,7 @@ public class Inventory {
 	public boolean getItem(String gadget){
 		for( String item : gadgets){
 			if(item.compareTo(gadget)==0)
+				gadgets.remove(item);
 				return true;
 		}
 		return false;
@@ -80,11 +81,12 @@ public class Inventory {
 	public void printToFile(String filename) {
 
 		JsonArray obj = new JsonArray();
-		for(String gadget : gadgets)
+		for(String gadget : gadgets) {
 			obj.add(gadget);
+		}
 
 		try(FileWriter file = new FileWriter(filename)) {
-			//file.write(obj.toJSONString());
+			file.write(obj.toString());
 
 		} catch (IOException ex) {//error
 			ex.printStackTrace();

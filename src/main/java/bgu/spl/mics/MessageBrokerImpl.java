@@ -63,7 +63,9 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public <T> void complete(Event<T> e, T result) {
-		futureMap.get(e).resolve(result);
+		Future<T> newF=futureMap.get(e);
+		//futureMap.get(e).resolve(result);
+		newF.resolve(result);
 	}
 
 
@@ -95,18 +97,19 @@ public class MessageBrokerImpl implements MessageBroker {
 			BlockingQueue<Subscriber> subscriberBlockingQueue = new LinkedBlockingQueue<Subscriber>();
 			messageMap.putIfAbsent(e.getClass(), subscriberBlockingQueue);
 		}
+		Future<T> newFuture = null;
 		sem.acquire();
 		BlockingQueue<Subscriber> queueMessage= messageMap.get(e.getClass()); //get queue of subscribers to event<T>
 		if(!queueMessage.isEmpty()) {
 			Subscriber tempGetSubscriber = queueMessage.take(); //remove head of the queue
+			newFuture = new Future<T>();
+			futureMap.putIfAbsent(e, newFuture);
 			subscriberMap.get(tempGetSubscriber).put(e);
 			queueMessage.put(tempGetSubscriber); //add to end of the queue - round robin
-			Future<T> newFuture = new Future<T>();
-			futureMap.put(e, newFuture);
-			return newFuture;
+
 		}
 		sem.release();
-		return null;
+		return newFuture;
 	}
 
 	@Override

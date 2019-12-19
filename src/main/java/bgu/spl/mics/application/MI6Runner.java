@@ -23,7 +23,7 @@ public class MI6Runner {
         try {
              //Json
             FileReader reader = new FileReader(
-                    "C:\\Users\\Yakir\\Desktop\\MI6c\\src\\input201 - 2.json");
+                    "/users/studs/bsc/2020/kashiy/IdeaProjects/MI6c/src/input201 - 2.json");
             JsonElement jsonElement = new JsonParser().parse(reader);
             JsonObject jsonObject = jsonElement.getAsJsonObject();
 
@@ -33,12 +33,14 @@ public class MI6Runner {
             int i =0;
             for(JsonElement element: gadgets)
             {
-                gadgetsArray[i]=element.toString();
+                gadgetsArray[i]=element.toString().substring(1,element.toString().length()-1);
                 i++;
             }
-            Inventory in = Inventory.getInstance();
-            in.load(gadgetsArray);
-            in.printToFile("Inventory Output.json");
+            Inventory inventory = Inventory.getInstance();
+            inventory.load(gadgetsArray);
+            for(String s :inventory.getGadgets())
+                System.out.println(s);
+            inventory.printToFile("Inventory Output.json");
 
             //squad
             String name;
@@ -48,7 +50,9 @@ public class MI6Runner {
             int u =0;
             for (JsonElement element : squad){
                 name = element.getAsJsonObject().get("name").toString();
+                name =name.substring(1,name.length()-1);
                 serialNumber = element.getAsJsonObject().get("serialNumber").toString();
+                serialNumber = serialNumber.substring(1,serialNumber.length()-1);
                 Agent addAgent = new Agent();
                 addAgent.setName(name);
                 addAgent.setSerialNumber(serialNumber);
@@ -64,7 +68,7 @@ public class MI6Runner {
             JsonArray intelligenceMissions =  jsonObject.get("services").getAsJsonObject().get("intelligence").getAsJsonArray();
             List<MissionInfo> intelligenceMissionsList = new LinkedList<>();
             for (JsonElement element1 : intelligenceMissions ){
-                JsonArray mission = element1.getAsJsonObject().get("missions").getAsJsonArray();
+                JsonArray mission = element1.getAsJsonObject().get("missions").getAsJsonArray(); //TODO two intelligence - each one will get the missions
                 for (JsonElement element2 : mission )
                 {
                     JsonArray serialAgentsNumbers = element2.getAsJsonObject().get("serialAgentsNumbers").getAsJsonArray();
@@ -76,7 +80,9 @@ public class MI6Runner {
                     int timeExpired =  element2.getAsJsonObject().get("timeExpired").getAsInt();
                     int timeIssued =  element2.getAsJsonObject().get("timeIssued").getAsInt();
                     String missionName = element2.getAsJsonObject().get("missionName").getAsString();
+                    missionName =missionName.substring(1,missionName.length()-1);
                     String gadget = element2.getAsJsonObject().get("gadget").getAsString();
+                    gadget= gadget.substring(1,gadget.length()-1);
                     MissionInfo missionCreated = new  MissionInfo();
                     missionCreated.setGadget(gadget);
                     missionCreated.setDuration(duration);
@@ -85,9 +91,11 @@ public class MI6Runner {
                     missionCreated.setTimeExpired(timeExpired);
                     missionCreated.setTimeIssued(timeIssued);
                     intelligenceMissionsList.add(missionCreated);
+
+                    //TODO - create intelligence
                 }
             }
-
+                    //Todo - we need to create the threadpool/thread
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -41,13 +41,20 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public <T> void subscribeEvent(Class<? extends Event<T>> type, Subscriber m) throws InterruptedException { //TODO check try & catch
+		if(!messageMap.containsKey(type)) { //just for not creating a queue for every event
+			BlockingQueue<Subscriber> subscriberBlockingQueue = new LinkedBlockingQueue<Subscriber>();
+			messageMap.putIfAbsent(type, subscriberBlockingQueue);
+		}
 		BlockingQueue<Subscriber> queueMessage= messageMap.get(type);
 		queueMessage.put(m);
 	}
 
 	@Override
 	public void subscribeBroadcast(Class<? extends Broadcast> type, Subscriber m) throws InterruptedException { //TODO check try & catch
-		//TODO all in sync
+		if(!messageMap.containsKey(type)) { //just for not creating a queue for every broadcast
+			BlockingQueue<Subscriber> subscriberBlockingQueue = new LinkedBlockingQueue<Subscriber>();
+			messageMap.putIfAbsent(type, subscriberBlockingQueue);
+		}
 
 		BlockingQueue<Subscriber> queueMessage= messageMap.get(type);
 		queueMessage.put(m);
@@ -84,7 +91,7 @@ public class MessageBrokerImpl implements MessageBroker {
 	
 	@Override
 	public <T> Future<T> sendEvent(Event<T> e) throws InterruptedException { //TODO check try & catch
-		if(!messageMap.containsKey(e.getClass())) { //just for not creating a queue for every broadcast
+		if(!messageMap.containsKey(e.getClass())) { //just for not creating a queue for every event
 			BlockingQueue<Subscriber> subscriberBlockingQueue = new LinkedBlockingQueue<Subscriber>();
 			messageMap.putIfAbsent(e.getClass(), subscriberBlockingQueue);
 		}

@@ -1,6 +1,17 @@
 package bgu.spl.mics.application.subscribers;
 
+import bgu.spl.mics.Future;
 import bgu.spl.mics.Subscriber;
+import bgu.spl.mics.application.messages.MissionReceivedEvent;
+import bgu.spl.mics.application.messages.TickBroadcast;
+import bgu.spl.mics.application.passiveObjects.MissionInfo;
+import bgu.spl.mics.example.messages.ExampleBroadcast;
+import bgu.spl.mics.example.messages.ExampleEvent;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A Publisher\Subscriber.
@@ -11,13 +22,40 @@ import bgu.spl.mics.Subscriber;
  */
 public class Intelligence extends Subscriber {
 
-	public Intelligence() {
-		super("Change_This_Name");
-		// TODO Implement this
+	private List<MissionInfo> myMissions;
+	private int currentTimeTick;
+	private String senderId;
+
+
+	public Intelligence(String name, List<MissionInfo> myMissions, String senderId) {
+		super(name); //constructor of subscriber registers on the messagebroker
+		this.myMissions=myMissions;
+		this.currentTimeTick=0;
+		this.senderId=senderId;
+
 	}
 
+
+
 	@Override
-	protected void initialize() {
-		// TODO Implement this
+	protected void initialize() throws InterruptedException {
+		System.out.println("Listener " + getName() + " started");
+
+
+		subscribeBroadcast(TickBroadcast.class, message -> {
+			currentTimeTick = message.getCurrentTime();
+			System.out.println("Listener " + getName() + " got a new message from " + message.getSenderId() + "! (currentTimeTick: " + currentTimeTick + ")");
+			for (MissionInfo mission: myMissions){
+				if(mission.getTimeIssued()<= currentTimeTick) {
+					Future<Boolean> future = this.getSimplePublisher().sendEvent(new MissionReceivedEvent(getName(), senderId, mission));
+					myMissions.remove(mission);
+				}
+			}
+			if(currentTimeTick > message.getTimeToTerminate()){
+				terminate();
+			}
+		});
+
 	}
+
 }

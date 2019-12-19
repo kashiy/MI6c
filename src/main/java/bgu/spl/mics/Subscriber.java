@@ -115,20 +115,14 @@ public abstract class Subscriber extends RunnableSubPub {
     @Override
     public final void run() {
         try {
-            initialize(); //do the subscribeevent/broadcast
+            initialize();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         while (!terminated) {
             try{
-
                 Message newMessageRecieved= messageBroker.awaitMessage(this);
-                if(Broadcast.class.isAssignableFrom(newMessageRecieved.getClass())){
-                    //TODO change time
-                }
-                else{
-                    callbackMap.get(newMessageRecieved.getClass()).call(newMessageRecieved);
-                }
+                callbackMap.get(newMessageRecieved.getClass()).call(newMessageRecieved);
             }
 
             catch(InterruptedException ignored){

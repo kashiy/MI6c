@@ -1,6 +1,10 @@
 package bgu.spl.mics.application.passiveObjects;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
+
 
 /**
  * Passive object representing the diary where all reports are stored.
@@ -11,16 +15,30 @@ import java.util.List;
  * You can add ONLY private fields and methods to this class as you see fit.
  */
 public class Diary {
+	private List<Report> reports;
+	private int total;
+	private AtomicInteger incrementTotal;
+
+	private static class SingletonHolder {
+		private static Diary instance = new Diary();
+	}
+
+
+	private Diary(){
+		reports = new CopyOnWriteArrayList<Report>();
+		total=0;
+		incrementTotal= new AtomicInteger(0);
+	}
+
 	/**
 	 * Retrieves the single instance of this class.
 	 */
 	public static Diary getInstance() {
-		//TODO: Implement this
-		return null;
+		return Diary.SingletonHolder.instance;
 	}
 
 	public List<Report> getReports() {
-		return null;
+		return reports;
 	}
 
 	/**
@@ -28,7 +46,7 @@ public class Diary {
 	 * @param reportToAdd - the report to add
 	 */
 	public void addReport(Report reportToAdd){
-		//TODO: Implement this
+		reports.add(reportToAdd);
 	}
 
 	/**
@@ -38,8 +56,8 @@ public class Diary {
 	 * List of all the reports in the diary.
 	 * This method is called by the main method in order to generate the output.
 	 */
-	public void printToFile(String filename){
-		//TODO: Implement this
+	public void printToFile(String filename){ //TODO YAKIR
+
 	}
 
 	/**
@@ -47,7 +65,16 @@ public class Diary {
 	 * @return the total number of received missions (executed / aborted) be all the M-instances.
 	 */
 	public int getTotal(){
-		//TODO: Implement this
-		return 0;
+		return incrementTotal.get();
+	}
+
+	/**
+	 * Increments the total number of received missions by 1
+	 */
+	public void incrementTotal(){
+		do{
+			total= incrementTotal.get();
+		}
+		while(!incrementTotal.compareAndSet(total,total+1));
 	}
 }

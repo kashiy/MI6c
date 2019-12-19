@@ -61,7 +61,7 @@ public class Future<T> {
      * 	       wait for {@code timeout} TimeUnits {@code unit}. If time has
      *         elapsed, return null.
      */
-	public T get(long timeout, TimeUnit unit) {//Todo cast for the long to int
+	public T get(long timeout, TimeUnit unit) {
 		if(!isDone()){
 			long startTime = System.currentTimeMillis();
 			long waitingInTimeUnite = TimeUnit.MILLISECONDS.convert(timeout,unit);

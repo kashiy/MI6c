@@ -3,9 +3,7 @@ package bgu.spl.mics.application.subscribers;
 import bgu.spl.mics.Future;
 import bgu.spl.mics.Subscriber;
 import bgu.spl.mics.application.messages.*;
-import bgu.spl.mics.application.passiveObjects.Diary;
-import bgu.spl.mics.application.passiveObjects.MissionInfo;
-import bgu.spl.mics.application.passiveObjects.Report;
+import bgu.spl.mics.application.passiveObjects.*;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -19,9 +17,9 @@ import java.util.concurrent.TimeUnit;
 public class M extends Subscriber {
 	private Diary diary;
 	private int currentTimeTick;
-	private String senderId;
+	private int senderId;
 
-	public M(String name, String senderId) {
+	public M(String name, int senderId) {
 		super(name);
 		this.senderId=senderId;
 		diary = Diary.getInstance();
@@ -43,14 +41,14 @@ public class M extends Subscriber {
 
 
 		subscribeEvent(MissionReceivedEvent.class, message -> {
-			Future<Boolean> futureAgents= getSimplePublisher().sendEvent(new AgentsAvailableEvent(message.getMission().getSerialAgentsNumbers(),getName(),senderId));
-			Future<Boolean> futureGadget= getSimplePublisher().sendEvent(new GadgetAvailableEvent(getName(),senderId,message.getMission().getGadget()));
+			Future<AgentMissionDetail> futureAgents= getSimplePublisher().sendEvent(new AgentsAvailableEvent(message.getMission().getSerialAgentsNumbers(),getName(),senderId));
+			Future<GadgetMissionDetail> futureGadget= getSimplePublisher().sendEvent(new GadgetAvailableEvent(getName(),senderId,message.getMission().getGadget()));
 
 			if(currentTimeTick <= message.getMission().getTimeExpired()){
-				if(futureAgents.get((long) message.getMission().getDuration(), TimeUnit.MILLISECONDS)== true && futureGadget.get(message.getMission().getDuration(), TimeUnit.MILLISECONDS) == true){
+				if(futureAgents.get((long) message.getMission().getDuration(), TimeUnit.MILLISECONDS).getAnswer()== true && futureGadget.get(message.getMission().getDuration(), TimeUnit.MILLISECONDS).getAnswer() == true){
 					//TODO Future<Boolean> futureSendOrAbort= getSimplePublisher().sendEvent(new SendOrAbortAgentsEvent(getName(),senderId,true));
 					Report newReport = new Report();
-					writeReport(newReport, message.getMission(), futureAgents.getMPserialnumber(), futureAgents.getAgentsNames);
+					writeReport(newReport, message.getMission(), futureAgents.get().getIdMoneyPenny(), futureAgents.get().getListAgentsNames(), futureGadget.get().getRecievedInQtime());
 					diary.addReport(newReport);
 					diary.incrementTotal();
 
@@ -71,8 +69,16 @@ public class M extends Subscriber {
 		
 	}
 
-	private void writeReport(Report newReport, MissionInfo mission, int MPserialnumber , List<String> agentsNames){
-		//TODO ALL THE SETVALUE YUVAL
+	private void writeReport(Report newReport, MissionInfo mission, int MPserialnumber , List<String> agentsNames, int Qtime){
+		newReport.setAgentsNames(agentsNames);
+		newReport.setAgentsSerialNumbersNumber(mission.getSerialAgentsNumbers());
+		newReport.setGadgetName(mission.getGadget());
+		newReport.setM(senderId);
+		newReport.setMissionName(mission.getMissionName());
+		newReport.setMoneypenny(MPserialnumber);
+		newReport.setQTime(Qtime);
+		newReport.setTimeCreated(currentTimeTick);
+		newReport.setTimeIssued(mission.getTimeIssued());
 	}
 
 }

@@ -4,6 +4,7 @@ import bgu.spl.mics.Subscriber;
 import bgu.spl.mics.application.messages.AgentsAvailableEvent;
 import bgu.spl.mics.application.messages.GadgetAvailableEvent;
 import bgu.spl.mics.application.messages.TickBroadcast;
+import bgu.spl.mics.application.passiveObjects.GadgetMissionDetail;
 import bgu.spl.mics.application.passiveObjects.Inventory;
 import bgu.spl.mics.application.passiveObjects.MissionInfo;
 import bgu.spl.mics.application.passiveObjects.Squad;
@@ -47,9 +48,9 @@ public class Q extends Subscriber {
 
 			Boolean gadgetAvailable = inventory.getItem(message.getGadget());
 
-			//she do the send agnets only if M tells her OR maybe release the agents if aborted
+			GadgetMissionDetail newDetail = new GadgetMissionDetail(gadgetAvailable,currentTimeTick);
 
-			complete(message,gadgetAvailable);
+			complete(message,newDetail);
 		});
 		
 	}

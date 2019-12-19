@@ -6,6 +6,7 @@ import bgu.spl.mics.application.messages.AgentsAvailableEvent;
 import bgu.spl.mics.application.messages.GadgetAvailableEvent;
 import bgu.spl.mics.application.messages.MissionReceivedEvent;
 import bgu.spl.mics.application.messages.TickBroadcast;
+import bgu.spl.mics.application.passiveObjects.AgentMissionDetail;
 import bgu.spl.mics.application.passiveObjects.Report;
 import bgu.spl.mics.application.passiveObjects.Squad;
 
@@ -50,7 +51,9 @@ public class Moneypenny extends Subscriber {
 
 			//she do the send agnets only if M tells her OR maybe release the agents if aborted
 
-			complete(message,agentsAvailable);
+			AgentMissionDetail newDetail = new AgentMissionDetail(agentsAvailable,serialID,squad.getAgentsNames(message.getSerialAgentsNumbers()));
+
+			complete(message,newDetail);
 		});
 		
 	}

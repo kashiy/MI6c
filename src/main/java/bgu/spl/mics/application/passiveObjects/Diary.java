@@ -1,5 +1,9 @@
 package bgu.spl.mics.application.passiveObjects;
 
+import com.google.gson.Gson;
+
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -57,6 +61,35 @@ public class Diary {
 	 * This method is called by the main method in order to generate the output.
 	 */
 	public void printToFile(String filename){ //TODO YAKIR
+
+/*
+		//JsonArray obj = new JsonArray();
+		for(Report report : this.getReports())
+		{
+			Gson gson = new Gson();
+			String json = gson.toJson(report);
+
+		}
+*/
+
+
+
+	//	for(String gadget : gadgets) {
+	//		obj.add(gadget);
+		//}
+
+		try(FileWriter file = new FileWriter(filename)) {
+			for(Report report : this.getReports())
+			{
+				Gson gson = new Gson();
+				String json = gson.toJson(report);
+				file.write(json);
+			}
+
+
+		} catch (IOException ex) {//error
+			ex.printStackTrace();
+		}
 
 	}
 

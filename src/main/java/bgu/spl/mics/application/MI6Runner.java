@@ -129,6 +129,7 @@ public class MI6Runner {
             newReport.setTimeIssued(timeIssued);
             Diary diary = Diary.getInstance();
             diary.getReports().add(newReport);
+            diary.incrementTotal();
             diary.printToFile("Diary Output.json");
 
             //Checks

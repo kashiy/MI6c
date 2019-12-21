@@ -1,6 +1,9 @@
 package bgu.spl.mics.application.passiveObjects;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -62,31 +65,13 @@ public class Diary {
 	 */
 	public void printToFile(String filename){ //TODO YAKIR
 
-/*
-		//JsonArray obj = new JsonArray();
-		for(Report report : this.getReports())
-		{
-			Gson gson = new Gson();
-			String json = gson.toJson(report);
 
-		}
-*/
-
-
-
-	//	for(String gadget : gadgets) {
-	//		obj.add(gadget);
-		//}
 
 		try(FileWriter file = new FileWriter(filename)) {
-			for(Report report : this.getReports())
-			{
-				Gson gson = new Gson();
-				String json = gson.toJson(report);
-				file.write(json);
-			}
-
-
+            DiaryPrinter diaryPrinter = new DiaryPrinter(this.getReports(),this.incrementTotal.get());
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String json = gson.toJson(diaryPrinter);
+            file.write(json);
 		} catch (IOException ex) {//error
 			ex.printStackTrace();
 		}
@@ -98,6 +83,7 @@ public class Diary {
 	 * @return the total number of received missions (executed / aborted) be all the M-instances.
 	 */
 	public int getTotal(){
+
 		return incrementTotal.get();
 	}
 

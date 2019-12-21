@@ -11,14 +11,14 @@ import java.util.List;
 public class Report {
 
 	private String missionName;
-	private int mSerialNumber;
-	private int moneyPennySerialNumber;
+	private int m;
+	private int moneypenny;
 	private List<String> agentsSerialNumbers;
 	private List<String> agentsNames;
 	private String gadgetName;
-	private int timeIssued;
-	private int QTime;
 	private int timeCreated;
+	private int timeIssued;
+	private int qTime;
 
 
 	/**
@@ -39,28 +39,28 @@ public class Report {
 	 * Retrieves the M's id.
 	 */
 	public int getM() {
-		return mSerialNumber;
+		return m;
 	}
 
 	/**
 	 * Sets the M's id.
 	 */
 	public void setM(int m) {
-		mSerialNumber=m;
+		this.m=m;
 	}
 
 	/**
 	 * Retrieves the Moneypenny's id.
 	 */
 	public int getMoneypenny() {
-		return moneyPennySerialNumber;
+		return moneypenny;
 	}
 
 	/**
 	 * Sets the Moneypenny's id.
 	 */
 	public void setMoneypenny(int moneypenny) {
-		moneyPennySerialNumber=moneypenny;
+		this.moneypenny=moneypenny;
 	}
 
 	/**
@@ -115,14 +115,14 @@ public class Report {
 	 * Retrieves the time-tick in which Q Received the GadgetAvailableEvent for that mission.
 	 */
 	public int getQTime() {
-		return QTime;
+		return qTime;
 	}
 
 	/**
 	 * Sets the time-tick in which Q Received the GadgetAvailableEvent for that mission.
 	 */
 	public void setQTime(int qTime) {
-		QTime=qTime;
+		this.qTime=qTime;
 	}
 
 	/**

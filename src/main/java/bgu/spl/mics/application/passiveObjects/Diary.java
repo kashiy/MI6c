@@ -63,9 +63,7 @@ public class Diary {
 	 * List of all the reports in the diary.
 	 * This method is called by the main method in order to generate the output.
 	 */
-	public void printToFile(String filename){ //TODO YAKIR
-
-
+	public void printToFile(String filename){
 
 		try(FileWriter file = new FileWriter(filename)) {
             DiaryPrinter diaryPrinter = new DiaryPrinter(this.getReports(),this.incrementTotal.get());
@@ -75,7 +73,6 @@ public class Diary {
 		} catch (IOException ex) {//error
 			ex.printStackTrace();
 		}
-
 	}
 
 	/**

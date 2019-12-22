@@ -66,7 +66,7 @@ public class Future<T> {
 			long startTime = System.currentTimeMillis();
 			long waitingInTimeUnite = TimeUnit.MILLISECONDS.convert(timeout,unit);
 			long endTime = startTime + waitingInTimeUnite;
-			while(System.currentTimeMillis() != endTime) {
+			while(System.currentTimeMillis() <= endTime) {
 				if (isDone()) {
 					return reasolvedVal;
 				}

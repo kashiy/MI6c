@@ -1,5 +1,12 @@
 package bgu.spl.mics.application.passiveObjects;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -56,8 +63,16 @@ public class Diary {
 	 * List of all the reports in the diary.
 	 * This method is called by the main method in order to generate the output.
 	 */
-	public void printToFile(String filename){ //TODO YAKIR
+	public void printToFile(String filename){
 
+		try(FileWriter file = new FileWriter(filename)) {
+            DiaryPrinter diaryPrinter = new DiaryPrinter(this.getReports(),this.incrementTotal.get());
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String json = gson.toJson(diaryPrinter);
+            file.write(json);
+		} catch (IOException ex) {//error
+			ex.printStackTrace();
+		}
 	}
 
 	/**
@@ -65,6 +80,7 @@ public class Diary {
 	 * @return the total number of received missions (executed / aborted) be all the M-instances.
 	 */
 	public int getTotal(){
+
 		return incrementTotal.get();
 	}
 

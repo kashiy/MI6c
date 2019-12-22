@@ -91,7 +91,7 @@ public class MissionInfo {
 	 */
 	public void setDuration(int duration) {
 		this.duration = duration;
-	} //TODO in the mi6 we need to do for any mission we load duration = EXPIRED -ISSUED
+	} //TODO when the JSON read in mi6 we need to do for any mission we load duration = EXPIRED -ISSUED
 
 	/**
 	 * Retrieves the duration of the mission in time-ticks.

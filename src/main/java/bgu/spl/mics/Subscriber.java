@@ -98,6 +98,7 @@ public abstract class Subscriber extends RunnableSubPub {
      */
     protected final <T> void complete(Event<T> e, T result) {
        messageBroker.complete(e,result);
+
     }
 
     /**

@@ -33,7 +33,7 @@ public class M extends Subscriber {
 
 		subscribeBroadcast(TickBroadcast.class, message -> {
 			currentTimeTick = message.getCurrentTime();
-			System.out.println("Listener " + getName() + " got a new message from " + message.getSenderId() + "! (currentTimeTick: " + currentTimeTick + ")");
+			//System.out.println("Listener " + getName() + " got a new message from " + message.getSenderId() + "! (currentTimeTick: " + currentTimeTick + ")");
 			if(currentTimeTick > message.getTimeToTerminate()){
 
 				terminate();
@@ -42,7 +42,7 @@ public class M extends Subscriber {
 
 
 		subscribeEvent(MissionReceivedEvent.class, message -> {
-			System.out.println(getName() + " MissionReceivedEvent " );
+			System.out.println("Event Handler " + getName() + " got a new MissionReceivedEvent from " + message.getSenderName() );
 			Future<AgentMissionDetail> futureAgents= getSimplePublisher().sendEvent(new AgentsAvailableEvent(message.getMission().getSerialAgentsNumbers(),getName(),senderId));
 			Future<GadgetMissionDetail> futureGadget= getSimplePublisher().sendEvent(new GadgetAvailableEvent(getName(),senderId,message.getMission().getGadget()));
 			Future<Boolean> futureSendOrAbort;

@@ -19,4 +19,8 @@ public class GadgetAvailableEvent implements Event<GadgetMissionDetail>{
         public String getGadget() {
             return gadget;
         }
+
+        public String getSenderName(){
+            return senderName;
+        }
 }

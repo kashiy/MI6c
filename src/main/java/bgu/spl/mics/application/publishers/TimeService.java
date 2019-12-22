@@ -43,7 +43,7 @@ public class TimeService extends Publisher {
 				++currentTime;
 				initialize();
 				--duration;
-				sleep(100);
+				Thread.sleep(100);//ToDO add to yuval
 			}
 
 		} catch (InterruptedException e) {

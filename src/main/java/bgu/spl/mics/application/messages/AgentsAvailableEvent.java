@@ -20,5 +20,7 @@ public class AgentsAvailableEvent implements Event<AgentMissionDetail>{
         return serialAgentsNumbers;
     }
 
-
+    public String getSenderName(){
+        return senderName;
+    }
 }

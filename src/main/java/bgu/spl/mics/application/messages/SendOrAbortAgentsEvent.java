@@ -32,4 +32,8 @@ public class SendOrAbortAgentsEvent implements Event<Boolean>{
     public int getTime() {
         return time;
     }
+
+    public String getSenderName(){
+        return senderName;
+    }
 }

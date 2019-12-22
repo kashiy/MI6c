@@ -37,7 +37,7 @@ public class Q extends Subscriber {
 
 		subscribeBroadcast(TickBroadcast.class, message -> {
 			currentTimeTick = message.getCurrentTime();
-			System.out.println("Listener " + getName() + " got a new message from " + message.getSenderId() + "! (currentTimeTick: " + currentTimeTick + ")");
+			//System.out.println("Listener " + getName() + " got a new message from " + message.getSenderId() + "! (currentTimeTick: " + currentTimeTick + ")");
 			if(currentTimeTick > message.getTimeToTerminate()){
 
 				terminate();
@@ -46,9 +46,9 @@ public class Q extends Subscriber {
 
 
 		subscribeEvent(GadgetAvailableEvent.class, message -> {
-            System.out.println(getName() + " GadgetAvailableEvent " );
+           // System.out.println(getName() + " GadgetAvailableEvent " );
 			Boolean gadgetAvailable = inventory.getItem(message.getGadget());
-
+			System.out.println("Event Handler " + getName() + " got a new GadgetAvailableEvent from " + message.getSenderName() );
 			GadgetMissionDetail newDetail = new GadgetMissionDetail(gadgetAvailable,currentTimeTick);
 
 			complete(message,newDetail);

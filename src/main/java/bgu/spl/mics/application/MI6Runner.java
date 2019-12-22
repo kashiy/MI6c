@@ -25,7 +25,7 @@ import com.google.gson.JsonParser;
 public class MI6Runner {
     public static void main(String[] args) {
         try {
-             //Json
+            //Json
             FileReader reader = new FileReader(
                     "C:\\Users\\Yakir\\Desktop\\MI6c\\src\\input201 - 2.json"); //todo in labs check the args[0]
             JsonElement jsonElement = new JsonParser().parse(reader);
@@ -34,10 +34,9 @@ public class MI6Runner {
             //inventory
             JsonArray gadgets = jsonObject.get("inventory").getAsJsonArray();
             String[] gadgetsArray = new String[gadgets.size()];
-            int i =0;
-            for(JsonElement element: gadgets)
-            {
-                gadgetsArray[i]=element.toString().substring(1,element.toString().length()-1);
+            int i = 0;
+            for (JsonElement element : gadgets) {
+                gadgetsArray[i] = element.toString().substring(1, element.toString().length() - 1);
                 i++;
             }
             Inventory.getInstance().load(gadgetsArray);
@@ -45,14 +44,14 @@ public class MI6Runner {
             //squad
             String name;
             String serialNumber;
-            JsonArray squad =  jsonObject.get("squad").getAsJsonArray();
+            JsonArray squad = jsonObject.get("squad").getAsJsonArray();
             Agent[] agents = new Agent[squad.size()];
-            int u =0;
-            for (JsonElement element : squad){
+            int u = 0;
+            for (JsonElement element : squad) {
                 name = element.getAsJsonObject().get("name").toString();
-                name =name.substring(1,name.length()-1);
+                name = name.substring(1, name.length() - 1);
                 serialNumber = element.getAsJsonObject().get("serialNumber").toString();
-                serialNumber = serialNumber.substring(1,serialNumber.length()-1);
+                serialNumber = serialNumber.substring(1, serialNumber.length() - 1);
                 Agent addAgent = new Agent();
                 addAgent.setName(name);
                 addAgent.setSerialNumber(serialNumber);
@@ -78,7 +77,7 @@ public class MI6Runner {
                     JsonArray serialAgentsNumbers = element2.getAsJsonObject().get("serialAgentsNumbers").getAsJsonArray();
                     List<String> serials = new LinkedList<>();
                     for (JsonElement element3 : serialAgentsNumbers) {
-                        serials.add(element3.toString());
+                        serials.add(element3.toString().substring(1, element3.toString().length() - 1));
                     }
                     int duration = element2.getAsJsonObject().get("duration").getAsInt();
                     int timeExpired = element2.getAsJsonObject().get("timeExpired").getAsInt();
@@ -154,12 +153,14 @@ public class MI6Runner {
             List<Thread> threadsList = new LinkedList<>();
             Semaphore sem= new Semaphore(1);
             sem.acquire();
-            for (int k = 1 ; k<=M; k++) {
+
+            for (int k = 1 ; k<M; k++) {// todo only m1 in use.
                 M newM = new M("M"+k, k);
                 Thread newThread= new Thread(newM);
                 threadsList.add(newThread);
                 newThread.start();
             }
+
             for (int j = 1 ; j<=Moneypenny; j++) {
                 Moneypenny newMoneyPenny= new Moneypenny("Mp"+j,j);
                 Thread newThread= new Thread(newMoneyPenny);
@@ -171,23 +172,33 @@ public class MI6Runner {
             threadsList.add(newThreadQ);
             newThreadQ.start();
 
-            for(Intelligence intelligence: intelligencesList){
+
+           for(Intelligence intelligence: intelligencesList){
                 Thread newThread= new Thread(intelligence);
                 threadsList.add(newThread);
                 newThread.start();
 
             }
 
+          /*
+            //Check with one intelligencesList
+            Thread newThread= new Thread(intelligencesList.get(1));
+            threadsList.add(newThread);
+            newThread.start();
+            */
+
             TimeService newTimeService= new TimeService("TimeService", time);
             Thread newThreadTime= new Thread(newTimeService);
             threadsList.add(newThreadTime);
             newThreadTime.start();
             System.out.println("time tick started");
-            sem.release();
-
             for(Thread thread: threadsList) {
                 thread.join();
             }
+            System.out.print(threadsList.size());
+            sem.release();
+
+
             Diary.getInstance().printToFile("diaryOutputFile.json");
             Inventory.getInstance().printToFile("inventoryOutputFile.json");
 

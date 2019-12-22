@@ -55,7 +55,7 @@ public class Inventory {
      * @return 	‘false’ if the gadget is missing, and ‘true’ otherwise
      */
 	public boolean getItem(String gadget){
-		for( String item : gadgets){
+		for(String item : gadgets){
 			if(item.compareTo(gadget)==0)
 				gadgets.remove(item);
 				return true;

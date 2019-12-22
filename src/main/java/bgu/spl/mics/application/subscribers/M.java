@@ -35,7 +35,7 @@ public class M extends Subscriber {
 			currentTimeTick = message.getCurrentTime();
 			System.out.println("Listener " + getName() + " got a new message from " + message.getSenderId() + "! (currentTimeTick: " + currentTimeTick + ")");
 			if(currentTimeTick > message.getTimeToTerminate()){
-				diary.printToFile("diaryOutputFile.json");
+
 				terminate();
 			}
 		});

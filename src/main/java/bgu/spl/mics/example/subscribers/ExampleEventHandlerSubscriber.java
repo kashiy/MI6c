@@ -29,7 +29,7 @@ public class ExampleEventHandlerSubscriber extends Subscriber {
     protected void initialize() throws InterruptedException {
         System.out.println("Event Handler " + getName() + " started");
 
-        subscribeEvent(ExampleEvent.class, ev -> {//callback
+        subscribeEvent(ExampleEvent.class, ev -> {
             mbt--;
             System.out.println("Event Handler " + getName() + " got a new event from " + ev.getSenderName() + "! (mbt: " + mbt + ")");
             complete(ev, "Hello from " + getName());
@@ -38,8 +38,6 @@ public class ExampleEventHandlerSubscriber extends Subscriber {
                 terminate();
             }
         });
-
-
     }
 
 }

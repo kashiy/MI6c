@@ -130,6 +130,7 @@ public abstract class Subscriber extends RunnableSubPub {
             }
 
         }
+        messageBroker.unregister(this);
         System.out.println("terminated" +getName());
 
     }

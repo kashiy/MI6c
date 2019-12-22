@@ -44,8 +44,8 @@ public class TimeService extends Publisher {
 				initialize();
 				--duration;
 				sleep(100);
-
 			}
+
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

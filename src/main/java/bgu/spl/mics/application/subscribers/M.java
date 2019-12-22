@@ -35,30 +35,36 @@ public class M extends Subscriber {
 			currentTimeTick = message.getCurrentTime();
 			System.out.println("Listener " + getName() + " got a new message from " + message.getSenderId() + "! (currentTimeTick: " + currentTimeTick + ")");
 			if(currentTimeTick > message.getTimeToTerminate()){
+				diary.printToFile("diaryOutputFile.json");
 				terminate();
 			}
 		});
 
 
 		subscribeEvent(MissionReceivedEvent.class, message -> {
+			System.out.println(getName() + " MissionReceivedEvent " );
 			Future<AgentMissionDetail> futureAgents= getSimplePublisher().sendEvent(new AgentsAvailableEvent(message.getMission().getSerialAgentsNumbers(),getName(),senderId));
 			Future<GadgetMissionDetail> futureGadget= getSimplePublisher().sendEvent(new GadgetAvailableEvent(getName(),senderId,message.getMission().getGadget()));
+			Future<Boolean> futureSendOrAbort;
 
-			if(currentTimeTick <= message.getMission().getTimeExpired()){
-				if(futureAgents.get((long) message.getMission().getDuration(), TimeUnit.MILLISECONDS).getAnswer()== true && futureGadget.get(message.getMission().getDuration(), TimeUnit.MILLISECONDS).getAnswer() == true){
-					//TODO Future<Boolean> futureSendOrAbort= getSimplePublisher().sendEvent(new SendOrAbortAgentsEvent(getName(),senderId,true));
+
+			if(futureAgents.get((long) message.getMission().getDuration(), TimeUnit.MILLISECONDS).getAnswer()== true && futureGadget.get(message.getMission().getDuration(), TimeUnit.MILLISECONDS).getAnswer() == true){
+				if(currentTimeTick <= message.getMission().getTimeExpired()){
+					futureSendOrAbort= getSimplePublisher().sendEvent(new SendOrAbortAgentsEvent(getName(),senderId,true,message.getMission().getSerialAgentsNumbers(),message.getMission().getDuration()));
 					Report newReport = new Report();
 					writeReport(newReport, message.getMission(), futureAgents.get().getIdMoneyPenny(), futureAgents.get().getListAgentsNames(), futureGadget.get().getRecievedInQtime());
 					diary.addReport(newReport);
-					diary.incrementTotal();
-
 				}
 				else{
-					//TODO Abrot
-					diary.incrementTotal();
+					futureSendOrAbort= getSimplePublisher().sendEvent(new SendOrAbortAgentsEvent(getName(),senderId,false,message.getMission().getSerialAgentsNumbers(),0));
+
 				}
 			}
+			else{
+				futureSendOrAbort= getSimplePublisher().sendEvent(new SendOrAbortAgentsEvent(getName(),senderId,false,message.getMission().getSerialAgentsNumbers(),0));
 
+			}
+			diary.incrementTotal();
 
 			complete(message,true);// tells intelligence it was completed
 		});

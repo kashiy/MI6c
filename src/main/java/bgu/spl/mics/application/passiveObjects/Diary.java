@@ -66,7 +66,7 @@ public class Diary {
 	public void printToFile(String filename){
 
 		try(FileWriter file = new FileWriter(filename)) {
-            DiaryPrinter diaryPrinter = new DiaryPrinter(this.getReports(),this.incrementTotal.get());
+            DiaryPrinter diaryPrinter = new DiaryPrinter(this.getReports(),this.getTotal());
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             String json = gson.toJson(diaryPrinter);
             file.write(json);

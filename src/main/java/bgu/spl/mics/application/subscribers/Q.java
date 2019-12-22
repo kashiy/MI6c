@@ -39,13 +39,14 @@ public class Q extends Subscriber {
 			currentTimeTick = message.getCurrentTime();
 			System.out.println("Listener " + getName() + " got a new message from " + message.getSenderId() + "! (currentTimeTick: " + currentTimeTick + ")");
 			if(currentTimeTick > message.getTimeToTerminate()){
+				inventory.printToFile("inventoryOutputFile.json");
 				terminate();
 			}
 		});
 
 
 		subscribeEvent(GadgetAvailableEvent.class, message -> {
-
+            System.out.println(getName() + " GadgetAvailableEvent " );
 			Boolean gadgetAvailable = inventory.getItem(message.getGadget());
 
 			GadgetMissionDetail newDetail = new GadgetMissionDetail(gadgetAvailable,currentTimeTick);

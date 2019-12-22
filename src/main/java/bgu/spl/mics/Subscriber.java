@@ -129,9 +129,10 @@ public abstract class Subscriber extends RunnableSubPub {
                 terminate();
             }
 
-            }
-
         }
+        System.out.println("terminated" +getName());
+
+    }
 }
 
 

@@ -34,7 +34,7 @@ public class Intelligence extends Subscriber {
 		this.senderId=senderId;
 
 	}
-	//Todo delete after checks
+	//Todo - delete this after checks
 	public List<MissionInfo> getMyMissions(){
 		return myMissions;
 	}

@@ -1,17 +1,19 @@
 package bgu.spl.mics.application;
 
-import bgu.spl.mics.application.passiveObjects.Agent;
-import bgu.spl.mics.application.passiveObjects.Inventory;
-import bgu.spl.mics.application.passiveObjects.MissionInfo;
-import bgu.spl.mics.application.passiveObjects.Report;
-import bgu.spl.mics.application.passiveObjects.Diary;
+import bgu.spl.mics.Subscriber;
+import bgu.spl.mics.application.passiveObjects.*;
 import com.google.gson.*;
-import bgu.spl.mics.application.subscribers.Intelligence;
+import bgu.spl.mics.application.subscribers.*;
+import bgu.spl.mics.application.publishers.*;
+
 
 import java.io.FileReader;
 import java.io.Reader;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
@@ -25,7 +27,7 @@ public class MI6Runner {
         try {
              //Json
             FileReader reader = new FileReader(
-                    "/Users/yakirzagron/Downloads/MI6c/src/input201 - 2.json");
+                    "C:\\Users\\Yakir\\Desktop\\MI6c\\src\\input201 - 2.json"); //todo in labs check the args[0]
             JsonElement jsonElement = new JsonParser().parse(reader);
             JsonObject jsonObject = jsonElement.getAsJsonObject();
 
@@ -38,11 +40,7 @@ public class MI6Runner {
                 gadgetsArray[i]=element.toString().substring(1,element.toString().length()-1);
                 i++;
             }
-            Inventory inventory = Inventory.getInstance();
-            inventory.load(gadgetsArray);
-            for(String s :inventory.getGadgets())
-                System.out.println(s);
-            inventory.printToFile("Inventory Output.json");
+            Inventory.getInstance().load(gadgetsArray);
 
             //squad
             String name;
@@ -62,6 +60,8 @@ public class MI6Runner {
                 agents[u] = addAgent;
                 u++;
             }
+            Squad.getInstance().load(agents);
+
 
             //services
             int M =  jsonObject.get("services").getAsJsonObject().get("M").getAsInt();
@@ -104,7 +104,7 @@ public class MI6Runner {
                 SerialId++;
             }
 
-
+/*
             //create report
              Report newReport = new Report();
              String missionName = "Check1";
@@ -130,8 +130,8 @@ public class MI6Runner {
             Diary diary = Diary.getInstance();
             diary.getReports().add(newReport);
             diary.incrementTotal();
-            diary.printToFile("Diary Output.json");
-
+            diary.printToFile("diaryOutputFile.json");
+*/
             //Checks
 
             /*
@@ -151,9 +151,36 @@ public class MI6Runner {
                }
                }
                */
+            Semaphore sem= new Semaphore(1);
+            sem.acquire();
+            for (int k = 1 ; k<=M; k++) {
+                M newM = new M("M"+k, k);
+                Thread newThread= new Thread(newM);
+                newThread.start();
+            }
+            for (int j = 1 ; j<=Moneypenny; j++) {
+                Moneypenny newMoneyPenny= new Moneypenny("Mp"+j,j);
+                Thread newThread= new Thread(newMoneyPenny);
+                newThread.start();
+            }
+            Q newQ =new Q("Q", 1);
+            Thread newThreadQ= new Thread(newQ);
+            newThreadQ.start();
+
+            for(Intelligence intelligence: intelligencesList){
+                Thread newThread= new Thread(intelligence);
+                newThread.start();
+
+            }
+
+            TimeService newTimeService= new TimeService("TimeService", time);
+            Thread newThreadTime= new Thread(newTimeService);
+            newThreadTime.start();
+            System.out.println("time tick started");
+            sem.release();
 
 
-                    //Todo - we need to create the threadpool/thread
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }

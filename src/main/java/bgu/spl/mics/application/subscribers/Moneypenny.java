@@ -2,10 +2,7 @@ package bgu.spl.mics.application.subscribers;
 
 import bgu.spl.mics.Future;
 import bgu.spl.mics.Subscriber;
-import bgu.spl.mics.application.messages.AgentsAvailableEvent;
-import bgu.spl.mics.application.messages.GadgetAvailableEvent;
-import bgu.spl.mics.application.messages.MissionReceivedEvent;
-import bgu.spl.mics.application.messages.TickBroadcast;
+import bgu.spl.mics.application.messages.*;
 import bgu.spl.mics.application.passiveObjects.AgentMissionDetail;
 import bgu.spl.mics.application.passiveObjects.Report;
 import bgu.spl.mics.application.passiveObjects.Squad;
@@ -44,17 +41,36 @@ public class Moneypenny extends Subscriber {
 			}
 		});
 
+		if(serialID % 2 == 1) {
+			subscribeEvent(AgentsAvailableEvent.class, message -> {
+				System.out.println(getName() + " AgentsAvailableEvent " );
+				Boolean agentsAvailable = squad.getAgents(message.getSerialAgentsNumbers());
 
-		subscribeEvent(AgentsAvailableEvent.class, message -> {
+				//she do the send agnets only if M tells her OR maybe release the agents if aborted
 
-			Boolean agentsAvailable= squad.getAgents(message.getSerialAgentsNumbers());
+				AgentMissionDetail newDetail = new AgentMissionDetail(agentsAvailable, serialID, squad.getAgentsNames(message.getSerialAgentsNumbers()));
 
-			//she do the send agnets only if M tells her OR maybe release the agents if aborted
+				complete(message, newDetail);
+			});
+		}
+		else{
+			subscribeEvent(SendOrAbortAgentsEvent.class, message -> {
+				System.out.println(getName() + " SendOrAbortAgentsEvent " );
+				boolean send = true;
+				Boolean sendOrAbort = message.getAnswer();
 
-			AgentMissionDetail newDetail = new AgentMissionDetail(agentsAvailable,serialID,squad.getAgentsNames(message.getSerialAgentsNumbers()));
+				if (sendOrAbort == send){
+					squad.sendAgents(message.getSerialAgentsNumbers(),message.getTime());
 
-			complete(message,newDetail);
-		});
+				}
+				else{
+					squad.releaseAgents(message.getSerialAgentsNumbers());
+
+				}
+
+				complete(message, true);
+			});
+		}
 		
 	}
 

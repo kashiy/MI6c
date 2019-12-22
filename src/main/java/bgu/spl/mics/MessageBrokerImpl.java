@@ -121,12 +121,12 @@ public class MessageBrokerImpl implements MessageBroker {
 	@Override
 	public void unregister(Subscriber m) {
 		if(subscriberMap.containsKey(m)) {
-			subscriberMap.remove(m); //delete the subscriber's queue
 			for (BlockingQueue messageQueue : messageMap.values()) {
 				if (messageQueue.contains(m)) {
 					messageQueue.remove(m);
 				}
 			}
+			subscriberMap.remove(m); //delete the subscriber's queue
 		}
 	}
 

@@ -56,12 +56,14 @@ public class Inventory {
      */
 	public boolean getItem(String gadget){
 		for(String item : gadgets){
-			if(item.compareTo(gadget)==0)
+			if(item.compareTo(gadget)==0) {
 				gadgets.remove(item);
 				return true;
+			}
 		}
 		return false;
 	}
+
 
 	/**
 	 *

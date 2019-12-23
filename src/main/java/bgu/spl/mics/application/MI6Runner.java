@@ -194,7 +194,7 @@ public class MI6Runner {
             for(Thread thread: threadsList) {
                 thread.join();
             }
-            System.out.print(threadsList.size());
+            System.out.print("threadsList.size() " + threadsList.size());
             sem.release();
 
 

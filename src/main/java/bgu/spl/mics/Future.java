@@ -61,19 +61,17 @@ public class Future<T> {
      * 	       wait for {@code timeout} TimeUnits {@code unit}. If time has
      *         elapsed, return null.
      */
-	public T get(long timeout, TimeUnit unit) {
-		if(!isDone()){
-			long startTime = System.currentTimeMillis();
-			long waitingInTimeUnite = TimeUnit.MILLISECONDS.convert(timeout,unit);
-			long endTime = startTime + waitingInTimeUnite;
-			while(System.currentTimeMillis() <= endTime) {
-				if (isDone()) {
-					return this.reasolvedVal; //TODO changed by yakir
-				}
+	public synchronized T get(long timeout, TimeUnit unit) {
+
+		if( !isDone()) {
+			try {
+				unit.timedWait(this,timeout);
 			}
-			return null;
+			catch(Exception e){
+
+			}
 		}
-		return this.reasolvedVal; //TODO changed by yakir
+		return this.reasolvedVal;
 	}
 
 }

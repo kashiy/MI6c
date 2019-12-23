@@ -36,7 +36,7 @@ public class Moneypenny extends Subscriber {
 		subscribeBroadcast(TickBroadcast.class, message -> {
 			this.currentTimeTick = message.getCurrentTime();
 			//System.out.println("Listener " + getName() + " got a new message from " + message.getSenderId() + "! (currentTimeTick: " + currentTimeTick + ")");
-			if(this.currentTimeTick > message.getTimeToTerminate()){
+			if(this.currentTimeTick >= message.getTimeToTerminate()){
 				terminate();
 			}
 		});

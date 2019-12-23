@@ -34,7 +34,7 @@ public class M extends Subscriber {
 		subscribeBroadcast(TickBroadcast.class, message -> {
 			currentTimeTick = message.getCurrentTime();
 			//System.out.println("Listener " + getName() + " got a new message from " + message.getSenderId() + "! (currentTimeTick: " + currentTimeTick + ")");
-			if(currentTimeTick > message.getTimeToTerminate()){
+			if(currentTimeTick >= message.getTimeToTerminate()){ //Todo terminate ==
 
 				terminate();
 			}
@@ -42,13 +42,14 @@ public class M extends Subscriber {
 
 
 		subscribeEvent(MissionReceivedEvent.class, message -> {
-			System.out.println("Event Handler " + getName() + " got a new MissionReceivedEvent named" + message.getMission().getMissionName() + " from " + message.getSenderName() );
+			System.out.println(Thread.currentThread().getName() +" Event Handler " + getName() + " got a new MissionReceivedEvent named" + message.getMission().getMissionName() + " from " + message.getSenderName() );
 			Future<AgentMissionDetail> futureAgents= getSimplePublisher().sendEvent(new AgentsAvailableEvent(message.getMission().getSerialAgentsNumbers(),getName(),this.senderId));
 			Future<GadgetMissionDetail> futureGadget= getSimplePublisher().sendEvent(new GadgetAvailableEvent(getName(),this.senderId,message.getMission().getGadget()));
 			Future<Boolean> futureSendOrAbort;
 
 
-			if(futureAgents.get((long) message.getMission().getDuration(), TimeUnit.MILLISECONDS).getAnswer()== true && futureGadget.get(message.getMission().getDuration(), TimeUnit.MILLISECONDS).getAnswer() == true){
+
+			if(futureAgents.get((long) message.getMission().getDuration(), TimeUnit.MILLISECONDS)!=null && futureAgents.get((long) message.getMission().getDuration(), TimeUnit.MILLISECONDS).getAnswer()== true && futureGadget.get(message.getMission().getDuration(), TimeUnit.MILLISECONDS)!= null &&futureGadget.get(message.getMission().getDuration(), TimeUnit.MILLISECONDS).getAnswer() == true){
 				if(currentTimeTick <= message.getMission().getTimeExpired()){
 					futureSendOrAbort= getSimplePublisher().sendEvent(new SendOrAbortAgentsEvent(getName(),this.senderId,true,message.getMission().getSerialAgentsNumbers(),message.getMission().getDuration()));
 					Report newReport = new Report();

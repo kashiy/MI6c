@@ -99,15 +99,15 @@ public class MessageBrokerImpl implements MessageBroker {
 		}
 		Future<T> newFuture = null;
 		sem.acquire();
-			BlockingQueue<Subscriber> queueMessage = messageMap.get(e.getClass()); //get queue of subscribers to event<T>
-			if (!queueMessage.isEmpty()) {
-				Subscriber tempGetSubscriber = queueMessage.take(); //remove head of the queue
-				newFuture = new Future<T>();
-				futureMap.putIfAbsent(e, newFuture);
-				subscriberMap.get(tempGetSubscriber).put(e);
-				queueMessage.put(tempGetSubscriber); //add to end of the queue - round robin
+		BlockingQueue<Subscriber> queueMessage= messageMap.get(e.getClass()); //get queue of subscribers to event<T>
+		if(!queueMessage.isEmpty()) {
+			Subscriber tempGetSubscriber = queueMessage.take(); //remove first subscriber head of the queue
+			newFuture = new Future<T>();
+			futureMap.putIfAbsent(e, newFuture);
+			subscriberMap.get(tempGetSubscriber).put(e);
+			queueMessage.put(tempGetSubscriber); //add again the subscriber to end of the queue - round robin
 
-			}
+		}
 		sem.release();
 		return newFuture;
 	}

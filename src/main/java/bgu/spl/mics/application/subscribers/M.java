@@ -42,7 +42,7 @@ public class M extends Subscriber {
 
 
 		subscribeEvent(MissionReceivedEvent.class, message -> {
-			System.out.println(Thread.currentThread().getName() +" Event Handler " + getName() + " got a new MissionReceivedEvent named" + message.getMission().getMissionName() + " from " + message.getSenderName() );
+			//System.out.println(Thread.currentThread().getName() +" Event Handler " + getName() + " got a new MissionReceivedEvent named" + message.getMission().getMissionName() + " from " + message.getSenderName() );
 			Future<AgentMissionDetail> futureAgents= getSimplePublisher().sendEvent(new AgentsAvailableEvent(message.getMission().getSerialAgentsNumbers(),getName(),this.senderId));
 			Future<GadgetMissionDetail> futureGadget= getSimplePublisher().sendEvent(new GadgetAvailableEvent(getName(),this.senderId,message.getMission().getGadget()));
 			Future<Boolean> futureSendOrAbort;

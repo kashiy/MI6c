@@ -62,7 +62,7 @@ public class Squad {
 	 * @param time   time ticks to sleep
 	 */
 	public void sendAgents(List<String> serials, int time) throws InterruptedException { //we know that time-tick every 100 milliseconds
-		Thread.sleep(time*100);//TODO add to yuval
+		Thread.sleep(time*100);
 		releaseAgents(serials);   //no need to sync because only the threads with the agents available will come here. so we think we dont have deadlock because when time pass we then release the agents
 	}
 

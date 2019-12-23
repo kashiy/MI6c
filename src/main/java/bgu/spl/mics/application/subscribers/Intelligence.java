@@ -44,10 +44,10 @@ public class Intelligence extends Subscriber {
 
 		subscribeBroadcast(TickBroadcast.class, message -> {
 			this.currentTimeTick = message.getCurrentTime();
-			System.out.println(getName() + " got a new message from " + message.getSenderId() + "! (currentTimeTick: " + this.currentTimeTick + ")");
+			//System.out.println(getName() + " got a new message from " + message.getSenderId() + "! (currentTimeTick: " + this.currentTimeTick + ")");
 			for (MissionInfo mission: this.myMissions){
 				if(mission.getTimeIssued() == this.currentTimeTick) {//TODO changed to == fixed monypeny
-					System.out.println("Intelligence sent mission " + mission.getMissionName() + " " + getName());
+					//System.out.println("Intelligence sent mission " + mission.getMissionName() + " " + getName());
 					Future<Boolean> future = this.getSimplePublisher().sendEvent(new MissionReceivedEvent(getName(), senderId, mission));
 				}
 			}

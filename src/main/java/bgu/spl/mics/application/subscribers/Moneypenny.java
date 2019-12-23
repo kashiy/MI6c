@@ -50,7 +50,7 @@ public class Moneypenny extends Subscriber {
 				Boolean agentsAvailable = squad.getAgents(message.getSerialAgentsNumbers());
 
 				//she do the send agnets only if M tells her OR maybe release the agents if aborted
-				System.out.println("Event Handler " + getName() + " got a AgentsAvailableEvent from " + message.getSenderName() );
+				//System.out.println("Event Handler " + getName() + " got a AgentsAvailableEvent from " + message.getSenderName() );
 				AgentMissionDetail newDetail = new AgentMissionDetail(agentsAvailable, serialID, squad.getAgentsNames(message.getSerialAgentsNumbers()));
 
 				complete(message, newDetail);
@@ -61,7 +61,7 @@ public class Moneypenny extends Subscriber {
 				//System.out.println(getName() + " SendOrAbortAgentsEvent " );
 				boolean send = true;
 				Boolean sendOrAbort = message.getAnswer();
-				System.out.println("Event Handler " + getName() + " got a SendOrAbortAgentsEvent from " + sendOrAbort.toString() + "" + message.getSenderName() );
+				//System.out.println("Event Handler " + getName() + " got a SendOrAbortAgentsEvent from " + sendOrAbort.toString() + "" + message.getSenderName() );
 				if (sendOrAbort == send){
 					squad.sendAgents(message.getSerialAgentsNumbers(),message.getTime());
 

@@ -132,7 +132,7 @@ public abstract class Subscriber extends RunnableSubPub {
 
         }
         messageBroker.unregister(this);
-        System.out.println("terminated" +getName());
+        System.out.println("terminated" +getName()); //TODO delete this line
 
     }
 }

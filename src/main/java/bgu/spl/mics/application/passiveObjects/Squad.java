@@ -17,7 +17,7 @@ import static java.lang.Thread.sleep;
  */
 public class Squad {
 
-	private Map<String, Agent> agentsMAP;
+	private Map<String, Agent> agentsMAP; // String = serial number.
 
 	private static class SingletonHolder {
 		private static Squad instance = new Squad();

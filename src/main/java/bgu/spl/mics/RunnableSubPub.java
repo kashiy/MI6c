@@ -23,7 +23,7 @@ abstract class RunnableSubPub implements Runnable {
      *         construction time and is used mainly for debugging purposes.
      */
     public final String getName() {
-        return name;
+        return this.name;
     }
 
     /**

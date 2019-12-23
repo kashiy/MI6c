@@ -27,7 +27,7 @@ public class MI6Runner {
         try {
             //Json
             FileReader reader = new FileReader(
-                    "C:\\Users\\Yakir\\Desktop\\MI6c\\src\\input201 - 2.json"); //todo in labs check the args[0]
+                    "C:\\Users\\Yuval Kashi\\IdeaProjects\\MI6c2\\src\\input201 - 2.json"); //todo in labs check the args[0]
             JsonElement jsonElement = new JsonParser().parse(reader);
             JsonObject jsonObject = jsonElement.getAsJsonObject();
 
@@ -154,14 +154,14 @@ public class MI6Runner {
             Semaphore sem= new Semaphore(1);
             sem.acquire();
 
-            for (int k = 1 ; k<M; k++) {// todo only m1 in use.
+            for (int k = 1 ; k<= M; k++) {// todo only m1 in use.
                 M newM = new M("M"+k, k);
                 Thread newThread= new Thread(newM);
                 threadsList.add(newThread);
                 newThread.start();
             }
 
-            for (int j = 1 ; j<=Moneypenny; j++) {
+            for (int j = 1 ; j<= Moneypenny; j++) {
                 Moneypenny newMoneyPenny= new Moneypenny("Mp"+j,j);
                 Thread newThread= new Thread(newMoneyPenny);
                 threadsList.add(newThread);

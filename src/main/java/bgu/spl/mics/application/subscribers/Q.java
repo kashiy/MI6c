@@ -38,7 +38,7 @@ public class Q extends Subscriber {
 		subscribeBroadcast(TickBroadcast.class, message -> {
 			currentTimeTick = message.getCurrentTime();
 			//System.out.println("Listener " + getName() + " got a new message from " + message.getSenderId() + "! (currentTimeTick: " + currentTimeTick + ")");
-			if(currentTimeTick > message.getTimeToTerminate()){
+			if(currentTimeTick >= message.getTimeToTerminate()){
 
 				terminate();
 			}

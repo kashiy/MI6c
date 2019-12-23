@@ -49,7 +49,6 @@ public class Intelligence extends Subscriber {
 				if(mission.getTimeIssued() == this.currentTimeTick) {//TODO changed to == fixed monypeny
 					System.out.println("Intelligence sent mission " + mission.getMissionName() + " " + getName());
 					Future<Boolean> future = this.getSimplePublisher().sendEvent(new MissionReceivedEvent(getName(), senderId, mission));
-							myMissions.remove(mission);
 				}
 			}
 			if(this.currentTimeTick >= message.getTimeToTerminate()){

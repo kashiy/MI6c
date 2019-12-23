@@ -26,8 +26,7 @@ public class MI6Runner {
     public static void main(String[] args) {
         try {
             //Json
-            FileReader reader = new FileReader(
-                    "C:\\Users\\Yuval Kashi\\IdeaProjects\\MI6c2\\src\\input201 - 2.json"); //todo in labs check the args[0]
+            FileReader reader = new FileReader(args[0]); //todo in labs check the args[0]
             JsonElement jsonElement = new JsonParser().parse(reader);
             JsonObject jsonObject = jsonElement.getAsJsonObject();
 

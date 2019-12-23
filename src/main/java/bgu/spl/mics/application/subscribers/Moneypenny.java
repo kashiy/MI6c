@@ -61,7 +61,7 @@ public class Moneypenny extends Subscriber {
 				//System.out.println(getName() + " SendOrAbortAgentsEvent " );
 				boolean send = true;
 				Boolean sendOrAbort = message.getAnswer();
-				System.out.println("Event Handler " + getName() + " got a SendOrAbortAgentsEvent from " + message.getSenderName() );
+				System.out.println("Event Handler " + getName() + " got a SendOrAbortAgentsEvent from " + sendOrAbort.toString() + "" + message.getSenderName() );
 				if (sendOrAbort == send){
 					squad.sendAgents(message.getSerialAgentsNumbers(),message.getTime());
 

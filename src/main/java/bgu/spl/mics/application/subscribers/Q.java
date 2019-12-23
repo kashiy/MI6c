@@ -48,7 +48,7 @@ public class Q extends Subscriber {
 		subscribeEvent(GadgetAvailableEvent.class, message -> {
            // System.out.println(getName() + " GadgetAvailableEvent " );
 			Boolean gadgetAvailable = inventory.getItem(message.getGadget());
-			System.out.println("Event Handler " + getName() + " got a new GadgetAvailableEvent from " + message.getSenderName() );
+			System.out.println("Event Handler " + getName() + " got a new GadgetAvailableEvent from " + message.getSenderName()  +" of " + message.getGadget());
 			GadgetMissionDetail newDetail = new GadgetMissionDetail(gadgetAvailable,currentTimeTick);
 
 			complete(message,newDetail);

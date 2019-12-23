@@ -24,7 +24,7 @@ public class Moneypenny extends Subscriber {
 	public Moneypenny(String name, int serialID) {
 		super(name);
 		this.serialID=serialID;
-		squad = Squad.getInstance();
+		this.squad = Squad.getInstance();
 		this.currentTimeTick=0;
 	}
 
@@ -34,18 +34,18 @@ public class Moneypenny extends Subscriber {
 
 
 		subscribeBroadcast(TickBroadcast.class, message -> {
-			currentTimeTick = message.getCurrentTime();
+			this.currentTimeTick = message.getCurrentTime();
 			//System.out.println("Listener " + getName() + " got a new message from " + message.getSenderId() + "! (currentTimeTick: " + currentTimeTick + ")");
-			if(currentTimeTick > message.getTimeToTerminate()){
+			if(this.currentTimeTick > message.getTimeToTerminate()){
 				terminate();
 			}
 		});
 
 		if(serialID % 2 == 1) {
 			subscribeEvent(AgentsAvailableEvent.class, message -> {
-				for (String s : message.getSerialAgentsNumbers()) {
-					System.out.println(s);
-				}
+			//	for (String s : message.getSerialAgentsNumbers()) {
+			//		System.out.println(s);
+			//	}
 				//System.out.println(getName() + " AgentsAvailableEvent " );
 				Boolean agentsAvailable = squad.getAgents(message.getSerialAgentsNumbers());
 

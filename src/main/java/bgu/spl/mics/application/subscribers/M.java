@@ -42,26 +42,26 @@ public class M extends Subscriber {
 
 
 		subscribeEvent(MissionReceivedEvent.class, message -> {
-			System.out.println("Event Handler " + getName() + " got a new MissionReceivedEvent from " + message.getSenderName() );
-			Future<AgentMissionDetail> futureAgents= getSimplePublisher().sendEvent(new AgentsAvailableEvent(message.getMission().getSerialAgentsNumbers(),getName(),senderId));
-			Future<GadgetMissionDetail> futureGadget= getSimplePublisher().sendEvent(new GadgetAvailableEvent(getName(),senderId,message.getMission().getGadget()));
+			System.out.println("Event Handler " + getName() + " got a new MissionReceivedEvent named" + message.getMission().getMissionName() + " from " + message.getSenderName() );
+			Future<AgentMissionDetail> futureAgents= getSimplePublisher().sendEvent(new AgentsAvailableEvent(message.getMission().getSerialAgentsNumbers(),getName(),this.senderId));
+			Future<GadgetMissionDetail> futureGadget= getSimplePublisher().sendEvent(new GadgetAvailableEvent(getName(),this.senderId,message.getMission().getGadget()));
 			Future<Boolean> futureSendOrAbort;
 
 
 			if(futureAgents.get((long) message.getMission().getDuration(), TimeUnit.MILLISECONDS).getAnswer()== true && futureGadget.get(message.getMission().getDuration(), TimeUnit.MILLISECONDS).getAnswer() == true){
 				if(currentTimeTick <= message.getMission().getTimeExpired()){
-					futureSendOrAbort= getSimplePublisher().sendEvent(new SendOrAbortAgentsEvent(getName(),senderId,true,message.getMission().getSerialAgentsNumbers(),message.getMission().getDuration()));
+					futureSendOrAbort= getSimplePublisher().sendEvent(new SendOrAbortAgentsEvent(getName(),this.senderId,true,message.getMission().getSerialAgentsNumbers(),message.getMission().getDuration()));
 					Report newReport = new Report();
 					writeReport(newReport, message.getMission(), futureAgents.get().getIdMoneyPenny(), futureAgents.get().getListAgentsNames(), futureGadget.get().getRecievedInQtime());
 					diary.addReport(newReport);
 				}
 				else{
-					futureSendOrAbort= getSimplePublisher().sendEvent(new SendOrAbortAgentsEvent(getName(),senderId,false,message.getMission().getSerialAgentsNumbers(),0));
+					futureSendOrAbort= getSimplePublisher().sendEvent(new SendOrAbortAgentsEvent(getName(),this.senderId,false,message.getMission().getSerialAgentsNumbers(),0));
 
 				}
 			}
 			else{
-				futureSendOrAbort= getSimplePublisher().sendEvent(new SendOrAbortAgentsEvent(getName(),senderId,false,message.getMission().getSerialAgentsNumbers(),0));
+				futureSendOrAbort= getSimplePublisher().sendEvent(new SendOrAbortAgentsEvent(getName(),this.senderId,false,message.getMission().getSerialAgentsNumbers(),0));
 
 			}
 			diary.incrementTotal();

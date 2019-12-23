@@ -16,7 +16,7 @@ public class Future<T> {
 	 * This should be the the only public constructor in this class.
 	 */
 	public Future() {
-		reasolvedVal=null;
+		this.reasolvedVal=null;
 	}
 	
 	/**
@@ -30,14 +30,14 @@ public class Future<T> {
 	public synchronized T get() throws InterruptedException {//check synchronized
 		while(!isDone())
 			wait();
-		return reasolvedVal;
+		return this.reasolvedVal;
 	}
 	
 	/**
      * Resolves the result of this Future object.
      */
 	public synchronized void resolve (T result) {//check synchronized
-		reasolvedVal =result;
+		this.reasolvedVal = result; //TODO changed by yakir
 		notifyAll();
 	}
 	
@@ -68,12 +68,12 @@ public class Future<T> {
 			long endTime = startTime + waitingInTimeUnite;
 			while(System.currentTimeMillis() <= endTime) {
 				if (isDone()) {
-					return reasolvedVal;
+					return this.reasolvedVal; //TODO changed by yakir
 				}
 			}
 			return null;
 		}
-		return reasolvedVal;
+		return this.reasolvedVal; //TODO changed by yakir
 	}
 
 }

@@ -34,10 +34,7 @@ public class Intelligence extends Subscriber {
 		this.senderId=senderId;
 
 	}
-	//Todo - delete this after checks
-	public List<MissionInfo> getMyMissions(){
-		return myMissions;
-	}
+
 
 
 	@Override
@@ -47,11 +44,12 @@ public class Intelligence extends Subscriber {
 
 		subscribeBroadcast(TickBroadcast.class, message -> {
 			currentTimeTick = message.getCurrentTime();
-			System.out.println("Listener " + getName() + " got a new message from " + message.getSenderId() + "! (currentTimeTick: " + currentTimeTick + ")");
-			for (MissionInfo mission: myMissions){
-				if(mission.getTimeIssued()<= currentTimeTick) {
+			System.out.println(getName() + " got a new message from " + message.getSenderId() + "! (currentTimeTick: " + currentTimeTick + ")");
+			for (MissionInfo mission: this.myMissions){
+				if(mission.getTimeIssued() == currentTimeTick) {//TODO changed to == fixed monypeny
+					System.out.println("Intelligence sent mission " + mission.getMissionName() + " " + getName());
 					Future<Boolean> future = this.getSimplePublisher().sendEvent(new MissionReceivedEvent(getName(), senderId, mission));
-					myMissions.remove(mission);
+							myMissions.remove(mission);
 				}
 			}
 			if(currentTimeTick > message.getTimeToTerminate()){

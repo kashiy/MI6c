@@ -42,35 +42,31 @@ public class M extends Subscriber {
 
 
 		subscribeEvent(MissionReceivedEvent.class, message -> {
-			//System.out.println(Thread.currentThread().getName() +" Event Handler " + getName() + " got a new MissionReceivedEvent named" + message.getMission().getMissionName() + " from " + message.getSenderName() );
+			System.out.println(Thread.currentThread().getName() +" " + getName() + " got a new MissionReceivedEvent named " + message.getMission().getMissionName() + " from " + message.getSenderName() );
 			Future<AgentMissionDetail> futureAgents= getSimplePublisher().sendEvent(new AgentsAvailableEvent(message.getMission().getSerialAgentsNumbers(),getName(),this.senderId));
 			Future<GadgetMissionDetail> futureGadget= getSimplePublisher().sendEvent(new GadgetAvailableEvent(getName(),this.senderId,message.getMission().getGadget()));
 			Future<Boolean> futureSendOrAbort;
 
 
 
-			if((futureAgents.get((long) message.getMission().getDuration(), TimeUnit.MILLISECONDS)!=null) && futureGadget.get(message.getMission().getDuration(), TimeUnit.MILLISECONDS)!= null ) {
+			if((futureAgents.get()!=null) && futureGadget.get()!= null ) {
 				if (futureAgents.get().getAnswer() == true && futureGadget.get().getAnswer() == true && currentTimeTick <= message.getMission().getTimeExpired() ) {
 						futureSendOrAbort = getSimplePublisher().sendEvent(new SendOrAbortAgentsEvent(getName(), this.senderId, true, message.getMission().getSerialAgentsNumbers(), message.getMission().getDuration()));
 						Report newReport = new Report();
 						writeReport(newReport, message.getMission(), futureAgents.get().getIdMoneyPenny(), futureAgents.get().getListAgentsNames(), futureGadget.get().getRecievedInQtime());
 						diary.addReport(newReport);
+					System.out.println("complited :" + Thread.currentThread().getName() +" " + getName() + "Mission Event named " + message.getMission().getMissionName() + " from " + message.getSenderName() ); //TODO delete this
 
 				} else {
 					futureSendOrAbort = getSimplePublisher().sendEvent(new SendOrAbortAgentsEvent(getName(), this.senderId, false, message.getMission().getSerialAgentsNumbers(), 0));
-
+					System.out.println("abrot but not null :" + Thread.currentThread().getName() +" " + getName() + " Mission named " + message.getMission().getMissionName() + " from " + message.getSenderName() + " futureAgents.get().getAnswer(): "+ futureAgents.get().getAnswer()+ " futureGadget.get().getAnswer(): "+ futureGadget.get().getAnswer() + " currentTimeTick <= message.getMission().getTimeExpired() " + currentTimeTick + " "+ message.getMission().getTimeExpired()); //TODO delete this
 				}
 			}
-				else{
-					futureSendOrAbort= getSimplePublisher().sendEvent(new SendOrAbortAgentsEvent(getName(),this.senderId,false,message.getMission().getSerialAgentsNumbers(),0));
-
-				}
-			/*
 			else{
 				futureSendOrAbort= getSimplePublisher().sendEvent(new SendOrAbortAgentsEvent(getName(),this.senderId,false,message.getMission().getSerialAgentsNumbers(),0));
-
+				System.out.println("abrot because null :" + Thread.currentThread().getName() +" Event Handler " + getName() + " Mission named " + message.getMission().getMissionName() + " from " + message.getSenderName() ); //TODO delete this
 			}
-			*/
+
 
 			diary.incrementTotal();
 

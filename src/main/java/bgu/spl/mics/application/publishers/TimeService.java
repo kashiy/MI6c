@@ -45,7 +45,7 @@ public class TimeService extends Publisher {
 				--duration;
 				Thread.sleep(100);//ToDO add to yuval
 			}
-			System.out.println("terminated try " +getName());
+			System.out.println("terminated timeService " +getName());
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

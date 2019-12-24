@@ -150,32 +150,32 @@ public class MI6Runner {
                }
                */
             List<Thread> threadsList = new LinkedList<>();
-            Semaphore sem= new Semaphore(1);
-            sem.acquire();
+            //Semaphore sem= new Semaphore(1);
+            //sem.acquire();
 
             for (int k = 1 ; k<= M; k++) {// todo only m1 in use.
                 M newM = new M("M"+k, k);
                 Thread newThread= new Thread(newM);
                 threadsList.add(newThread);
-                newThread.start();
+                //newThread.start();
             }
 
             for (int j = 1 ; j<= Moneypenny; j++) {
                 Moneypenny newMoneyPenny= new Moneypenny("Mp"+j,j);
                 Thread newThread= new Thread(newMoneyPenny);
                 threadsList.add(newThread);
-                newThread.start();
+                //newThread.start();
             }
             Q newQ =new Q("Q", 1);
             Thread newThreadQ= new Thread(newQ);
             threadsList.add(newThreadQ);
-            newThreadQ.start();
+            //newThreadQ.start();
 
 
            for(Intelligence intelligence: intelligencesList){
                 Thread newThread= new Thread(intelligence);
                 threadsList.add(newThread);
-                newThread.start();
+                //newThread.start();
 
             }
 
@@ -189,13 +189,18 @@ public class MI6Runner {
             TimeService newTimeService= new TimeService("TimeService", time);
             Thread newThreadTime= new Thread(newTimeService);
             threadsList.add(newThreadTime);
-            newThreadTime.start();
+            //newThreadTime.start();
+
+
+            for(Thread thread: threadsList) {
+                thread.start();
+            }
             System.out.println("time tick started");
             for(Thread thread: threadsList) {
                 thread.join();
             }
-            System.out.print("threadsList.size() " + threadsList.size());
-            sem.release();
+            //System.out.print("threadsList.size() " + threadsList.size());
+            //sem.release();
 
 
             Diary.getInstance().printToFile("diaryOutputFile.json");

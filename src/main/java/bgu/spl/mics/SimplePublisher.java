@@ -23,7 +23,7 @@ public final class SimplePublisher {
      *         			subscriber processing this event.
      * 	       			null in case no Subscriber has subscribed to {@code e.getClass()}.
      */
-    public final <T> Future<T> sendEvent(Event<T> e) throws InterruptedException {
+    public final <T> Future<T> sendEvent(Event<T> e) {
         MessageBroker messageBroker = MessageBrokerImpl.getInstance();
         Future<T> future = messageBroker.sendEvent(e);
         return future;
@@ -35,7 +35,7 @@ public final class SimplePublisher {
      * <p>
      * @param b The broadcast message to send
      */
-    public final void sendBroadcast(Broadcast b) throws InterruptedException {
+    public final void sendBroadcast(Broadcast b) {
         MessageBroker messageBroker = MessageBrokerImpl.getInstance();
         messageBroker.sendBroadcast(b);
     }

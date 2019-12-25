@@ -63,8 +63,11 @@ public class Squad {
 	 * simulates executing a mission by calling sleep.
 	 * @param time   time ticks to sleep
 	 */
-	public void sendAgents(List<String> serials, int time) throws InterruptedException { //we know that time-tick every 100 milliseconds
-		Thread.sleep(time*100);
+	public void sendAgents(List<String> serials, int time) { //we know that time-tick every 100 milliseconds
+		try {
+			Thread.sleep(time*100);
+		} catch (InterruptedException ignored) {
+		}
 		releaseAgents(serials);   //no need to sync because only the threads with the agents available will come here. so we think we dont have deadlock because when time pass we then release the agents
 	}
 
@@ -87,7 +90,7 @@ public class Squad {
 	 * @param serials   the serial numbers of the agents
 	 * @return ‘false’ if an agent of serialNumber ‘serial’ is missing, and ‘true’ otherwise
 	 */
-	public synchronized boolean getAgents(List<String> serials) throws InterruptedException { //need to check if another sync is ok
+	public synchronized boolean getAgents(List<String> serials) { //need to check if another sync is ok
 
 		for(String serial: serials){
 			if (agentsMAP.get(serial) == null){
@@ -96,7 +99,10 @@ public class Squad {
 		}
 		while (!acquireAgents(serials)){
 			releaseAgents(serials);
-			wait();
+			try {
+				wait();
+			} catch (InterruptedException ignored) {
+			}
 		}
 		return true;
 	}
@@ -118,9 +124,5 @@ public class Squad {
 		return agentsNames;
     }
 
-
-	public Map<String, Agent> getAgentsMAP() {//TODO delete after finish checks
-		return agentsMAP;
-	}
 }
 

@@ -26,7 +26,7 @@ public class ExampleBroadcastSubscriber extends Subscriber {
     }
 
     @Override
-    protected void initialize() throws InterruptedException {
+    protected void initialize()  {
         System.out.println("Listener " + getName() + " started");
         
         subscribeBroadcast(ExampleBroadcast.class, message -> {

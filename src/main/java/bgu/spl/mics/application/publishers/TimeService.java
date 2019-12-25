@@ -31,7 +31,7 @@ public class TimeService extends Publisher {
 	}
 
 	@Override
-	protected void initialize() throws InterruptedException {
+	protected void initialize() {
 		getSimplePublisher().sendBroadcast(new TickBroadcast(senderId,currentTime,timeToTerminate));
 		
 	}

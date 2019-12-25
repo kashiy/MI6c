@@ -26,7 +26,7 @@ public class ExampleEventHandlerSubscriber extends Subscriber {
     }
 
     @Override
-    protected void initialize() throws InterruptedException {
+    protected void initialize()  {
         System.out.println("Event Handler " + getName() + " started");
 
         subscribeEvent(ExampleEvent.class, ev -> {

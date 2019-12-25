@@ -56,8 +56,12 @@ public abstract class Subscriber extends RunnableSubPub {
      *                 queue.
      */
 
-    protected final <T, E extends Event<T>> void subscribeEvent(Class<E> type, Callback<E> callback) throws InterruptedException {
-         messageBroker.subscribeEvent(type,this);
+    protected final <T, E extends Event<T>> void subscribeEvent(Class<E> type, Callback<E> callback) {
+        try {
+            messageBroker.subscribeEvent(type,this);
+        } catch (InterruptedException ignored) {
+
+        }
         callbackMap.putIfAbsent(type,callback);
     }
 
@@ -81,8 +85,12 @@ public abstract class Subscriber extends RunnableSubPub {
      *                 {@code type} are taken from this Subscriber message
      *                 queue.
      */
-    protected final <B extends Broadcast> void subscribeBroadcast(Class<B> type, Callback<B> callback) throws InterruptedException {
-        messageBroker.subscribeBroadcast(type,this);
+    protected final <B extends Broadcast> void subscribeBroadcast(Class<B> type, Callback<B> callback) {
+        try {
+            messageBroker.subscribeBroadcast(type,this);
+        } catch (InterruptedException ignored) {
+
+        }
         callbackMap.putIfAbsent(type,callback);
     }
 
@@ -115,11 +123,8 @@ public abstract class Subscriber extends RunnableSubPub {
      */
     @Override
     public final void run() {
-        try {
-            initialize();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        initialize();
+
         while (!terminated) {
             try{
                 Message newMessageRecieved= messageBroker.awaitMessage(this);

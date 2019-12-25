@@ -40,24 +40,32 @@ public class MessageBrokerImpl implements MessageBroker {
 
 
 	@Override
-	public <T> void subscribeEvent(Class<? extends Event<T>> type, Subscriber m) throws InterruptedException { //TODO check try & catch
+	public <T> void subscribeEvent(Class<? extends Event<T>> type, Subscriber m) {
 		if(!messageMap.containsKey(type)) { //just for not creating a queue for every event
 			BlockingQueue<Subscriber> subscriberBlockingQueue = new LinkedBlockingQueue<Subscriber>();
 			messageMap.putIfAbsent(type, subscriberBlockingQueue);
 		}
 		BlockingQueue<Subscriber> queueMessage= messageMap.get(type);
-		queueMessage.put(m);
+		try {
+			queueMessage.put(m);
+		} catch (InterruptedException ignored) {
+
+		}
 	}
 
 	@Override
-	public void subscribeBroadcast(Class<? extends Broadcast> type, Subscriber m) throws InterruptedException { //TODO check try & catch
+	public void subscribeBroadcast(Class<? extends Broadcast> type, Subscriber m) {
 		if(!messageMap.containsKey(type)) { //just for not creating a queue for every broadcast
 			BlockingQueue<Subscriber> subscriberBlockingQueue = new LinkedBlockingQueue<Subscriber>();
 			messageMap.putIfAbsent(type, subscriberBlockingQueue);
 		}
 
 		BlockingQueue<Subscriber> queueMessage= messageMap.get(type);
-		queueMessage.put(m);
+		try {
+			queueMessage.put(m);
+		} catch (InterruptedException ignored) {
+
+		}
 
 	}
 
@@ -76,7 +84,7 @@ public class MessageBrokerImpl implements MessageBroker {
 	 * @param b 	The message to added to the queues.
 	 */
 	@Override
-	public void sendBroadcast(Broadcast b) throws InterruptedException { //TODO check try & catch
+	public void sendBroadcast(Broadcast b) {
 		if(!messageMap.containsKey(b.getClass())) { //just for not creating a queue for every broadcast
 			BlockingQueue<Subscriber> subscriberBlockingQueue = new LinkedBlockingQueue<Subscriber>();
 			messageMap.putIfAbsent(b.getClass(), subscriberBlockingQueue);
@@ -85,30 +93,39 @@ public class MessageBrokerImpl implements MessageBroker {
 		BlockingQueue<Subscriber> queueMessage= messageMap.get(b.getClass()); //get queue
 
 		for (Subscriber subscriberRegistered : queueMessage) {
-			subscriberMap.get(subscriberRegistered).put(b); // add the broadcast to the subscribers
+			try {
+				subscriberMap.get(subscriberRegistered).put(b); // add the broadcast to the subscribers
+			} catch (InterruptedException ignored) {
+
+			}
 		}
 
 	}
 
 	
 	@Override
-	public <T> Future<T> sendEvent(Event<T> e) throws InterruptedException { //TODO check try & catch
+	public <T> Future<T> sendEvent(Event<T> e)  {
 		if(!messageMap.containsKey(e.getClass())) { //just for not creating a queue for every event
 			BlockingQueue<Subscriber> subscriberBlockingQueue = new LinkedBlockingQueue<Subscriber>();
 			messageMap.putIfAbsent(e.getClass(), subscriberBlockingQueue);
 		}
 		Future<T> newFuture = null;
-		sem.acquire();
-		BlockingQueue<Subscriber> queueMessage= messageMap.get(e.getClass()); //get queue of subscribers to event<T>
-		if(!queueMessage.isEmpty()) {
-			Subscriber tempGetSubscriber = queueMessage.take(); //remove first subscriber head of the queue
-			newFuture = new Future<T>();
-			futureMap.putIfAbsent(e, newFuture);
-			subscriberMap.get(tempGetSubscriber).put(e);
-			queueMessage.put(tempGetSubscriber); //add again the subscriber to end of the queue - round robin
+		try {
+			sem.acquire();
+			BlockingQueue<Subscriber> queueMessage = messageMap.get(e.getClass()); //get queue of subscribers to event<T>
+			if (!queueMessage.isEmpty()) {
+				Subscriber tempGetSubscriber = queueMessage.take(); //remove first subscriber head of the queue
+				newFuture = new Future<T>();
+				futureMap.putIfAbsent(e, newFuture);
+				subscriberMap.get(tempGetSubscriber).put(e);
+				queueMessage.put(tempGetSubscriber); //add again the subscriber to end of the queue - round robin
+
+			}
+			sem.release();
+		}
+		catch(InterruptedException ignored){
 
 		}
-		sem.release();
 		return newFuture;
 	}
 

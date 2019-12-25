@@ -28,16 +28,9 @@ public class M extends Subscriber {
 
 	@Override
 	protected void initialize() {
-		System.out.println("Listener " + getName() + " started");
-
 
 		subscribeBroadcast(TickBroadcast.class, message -> {
 			currentTimeTick = message.getCurrentTime();
-			System.out.println("Listener " + getName() + " got a new message from " + message.getSenderId() + "! (currentTimeTick: " + currentTimeTick + ")");
-			//if(currentTimeTick >= message.getTimeToTerminate()){ //Todo terminate ==
-
-				//terminate();
-			//}
 		});
 
 		subscribeBroadcast(TerminateM.class, message -> {
@@ -58,7 +51,6 @@ public class M extends Subscriber {
 
 
 		subscribeEvent(MissionReceivedEvent.class, message -> {
-			System.out.println(Thread.currentThread().getName() +" " + getName() + " got a new MissionReceivedEvent named " + message.getMission().getMissionName() + " from " + message.getSenderName() );
 			Future<AgentMissionDetail> futureAgents= getSimplePublisher().sendEvent(new AgentsAvailableEvent(message.getMission().getSerialAgentsNumbers(),getName(),this.senderId));
 			Future<GadgetMissionDetail> futureGadget;
 			Future<Boolean> futureSendOrAbort;
@@ -72,23 +64,19 @@ public class M extends Subscriber {
 						Report newReport = new Report();
 						writeReport(newReport, message.getMission(), futureAgents.get().getIdMoneyPenny(), futureAgents.get().getListAgentsNames(), futureGadget.get().getRecievedInQtime());
 						diary.addReport(newReport);
-					System.out.println("				complited :" + Thread.currentThread().getName() +" " + getName() + " Mission Event named " + message.getMission().getMissionName() + " from " + message.getSenderName() ); //TODO delete this
 
 				}
 				else {
 					futureSendOrAbort = getSimplePublisher().sendEvent(new SendOrAbortAgentsEvent(getName(), this.senderId, false, message.getMission().getSerialAgentsNumbers(), 0));
-					//System.out.println("				abrot but not null :" + Thread.currentThread().getName() +" " + getName() + " Mission named " + message.getMission().getMissionName() + " from " + message.getSenderName() + " futureAgents.get().getAnswer(): "+ futureAgents.get().getAnswer()+ " futureGadget.get().getAnswer(): "+ futureGadget.get().getAnswer() + " currentTimeTick <= message.getMission().getTimeExpired() " + currentTimeTick + " "+ message.getMission().getTimeExpired()); //TODO delete this
 				}
 			}
 			else{
 				futureSendOrAbort= getSimplePublisher().sendEvent(new SendOrAbortAgentsEvent(getName(),this.senderId,false,message.getMission().getSerialAgentsNumbers(),0));
-				//System.out.println("				abrot because null :" + Thread.currentThread().getName() +" Event Handler " + getName() + " Mission named " + message.getMission().getMissionName() + " from " + message.getSenderName() ); //TODO delete this
 			}
-
 
 			diary.incrementTotal();
 
-			complete(message,true);// tells intelligence it was completed
+			complete(message,true);
 		});
 
 

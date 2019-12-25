@@ -31,15 +31,11 @@ public class Moneypenny extends Subscriber {
 
 	@Override
 	protected void initialize() {
-		System.out.println("Listener " + getName() + " started");
+
 
 
 		subscribeBroadcast(TickBroadcast.class, message -> {
 			this.currentTimeTick = message.getCurrentTime();
-			//System.out.println("Listener " + getName() + " got a new message from " + message.getSenderId() + "! (currentTimeTick: " + currentTimeTick + ")");
-			//if(this.currentTimeTick >= message.getTimeToTerminate()){
-			//	terminate();
-		//	}
 		});
 
 		subscribeBroadcast(TeminateBrodcast.class, message -> {
@@ -48,17 +44,12 @@ public class Moneypenny extends Subscriber {
 
 		if(serialID % 2 == 1) {
 			subscribeEvent(AgentsAvailableEvent.class, message -> {
-			//	for (String s : message.getSerialAgentsNumbers()) {
-			//		System.out.println(s);
-			//	}
-				//System.out.println(getName() + " AgentsAvailableEvent " );
 				Boolean agentsAvailable = squad.getAgents(message.getSerialAgentsNumbers());
 
 				List<String> listAgentsNames= squad.getAgentsNames(message.getSerialAgentsNumbers());
 
-
 				//she do the send agnets only if M tells her OR maybe release the agents if aborted
-				System.out.println(Thread.currentThread().getName() +" " +"Event Handler " + getName() + " got a AgentsAvailableEvent from " + message.getSenderName() );
+
 				AgentMissionDetail newDetail = new AgentMissionDetail(agentsAvailable, serialID, listAgentsNames);
 
 				complete(message, newDetail);
@@ -66,10 +57,10 @@ public class Moneypenny extends Subscriber {
 		}
 		else{
 			subscribeEvent(SendOrAbortAgentsEvent.class, message -> {
-				//System.out.println(getName() + " SendOrAbortAgentsEvent " );
+
 				boolean send = true;
 				Boolean sendOrAbort = message.getAnswer();
-				//System.out.println("Event Handler " + getName() + " got a SendOrAbortAgentsEvent from " + sendOrAbort.toString() + "" + message.getSenderName() );
+
 				if (sendOrAbort == send){
 					squad.sendAgents(message.getSerialAgentsNumbers(),message.getTime());
 

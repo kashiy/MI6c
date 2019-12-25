@@ -82,9 +82,7 @@ public class MI6Runner {
                     int timeExpired = element2.getAsJsonObject().get("timeExpired").getAsInt();
                     int timeIssued = element2.getAsJsonObject().get("timeIssued").getAsInt();
                     String missionName = element2.getAsJsonObject().get("missionName").getAsString();
-                    // missionName =missionName.substring(0,missionName.length()-1);
                     String gadget = element2.getAsJsonObject().get("gadget").getAsString();
-                    // gadget= gadget.substring(1,gadget.length()-1);
                     MissionInfo missionCreated = new MissionInfo();
                     missionCreated.setGadget(gadget);
                     missionCreated.setDuration(duration);
@@ -140,11 +138,11 @@ public class MI6Runner {
 
 
 
-            for(Thread thread: threadsList) {
+            for(Thread thread: threadsList) { //run all threads - note that timeService probably be the last one
                 thread.start();
             }
-            System.out.println("time tick started");
-            for(Thread thread: threadsList) {
+
+            for(Thread thread: threadsList) { //wait for all threads to finish
                 thread.join();
             }
 

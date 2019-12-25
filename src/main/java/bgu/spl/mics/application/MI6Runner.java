@@ -149,9 +149,9 @@ public class MI6Runner {
             }
 
 
+            Inventory.getInstance().printToFile(args[1]);
+            Diary.getInstance().printToFile(args[2]);
 
-            Diary.getInstance().printToFile("diaryOutputFile.json");
-            Inventory.getInstance().printToFile("inventoryOutputFile.json");
 
 
         } catch (Exception ignored) {

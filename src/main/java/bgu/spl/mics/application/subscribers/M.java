@@ -34,11 +34,27 @@ public class M extends Subscriber {
 		subscribeBroadcast(TickBroadcast.class, message -> {
 			currentTimeTick = message.getCurrentTime();
 			System.out.println("Listener " + getName() + " got a new message from " + message.getSenderId() + "! (currentTimeTick: " + currentTimeTick + ")");
-			if(currentTimeTick >= message.getTimeToTerminate()){ //Todo terminate ==
+			//if(currentTimeTick >= message.getTimeToTerminate()){ //Todo terminate ==
 
-				terminate();
-			}
+				//terminate();
+			//}
 		});
+
+		subscribeBroadcast(TerminateM.class, message -> {
+			terminate();
+			getSimplePublisher().sendBroadcast(new TeminateBrodcast());
+		});
+
+
+
+
+
+
+
+
+
+
+
 
 
 		subscribeEvent(MissionReceivedEvent.class, message -> {
@@ -46,12 +62,12 @@ public class M extends Subscriber {
 			Future<AgentMissionDetail> futureAgents= getSimplePublisher().sendEvent(new AgentsAvailableEvent(message.getMission().getSerialAgentsNumbers(),getName(),this.senderId));
 			Future<GadgetMissionDetail> futureGadget;
 			Future<Boolean> futureSendOrAbort;
+			int time =(message.getMission().getTimeExpired()-message.getMission().getTimeIssued())*100;
 
 
-
-			if(futureAgents !=null && futureAgents.get()!=null && futureAgents.get().getAnswer() == true ) {
+			if(futureAgents !=null && futureAgents.get(time,TimeUnit.MILLISECONDS)!=null && futureAgents.get().getAnswer() == true ) {
 				futureGadget= getSimplePublisher().sendEvent(new GadgetAvailableEvent(getName(),this.senderId,message.getMission().getGadget()));
-				if (futureGadget != null && futureGadget.get()!= null && futureGadget.get().getAnswer() == true && currentTimeTick <= message.getMission().getTimeExpired() ) {
+				if (futureGadget != null && futureGadget.get(time,TimeUnit.MILLISECONDS)!= null && futureGadget.get().getAnswer() == true && currentTimeTick <= message.getMission().getTimeExpired() ) {
 						futureSendOrAbort = getSimplePublisher().sendEvent(new SendOrAbortAgentsEvent(getName(), this.senderId, true, message.getMission().getSerialAgentsNumbers(), message.getMission().getDuration()));
 						Report newReport = new Report();
 						writeReport(newReport, message.getMission(), futureAgents.get().getIdMoneyPenny(), futureAgents.get().getListAgentsNames(), futureGadget.get().getRecievedInQtime());

@@ -3,6 +3,7 @@ package bgu.spl.mics.application.subscribers;
 import bgu.spl.mics.Future;
 import bgu.spl.mics.Subscriber;
 import bgu.spl.mics.application.messages.MissionReceivedEvent;
+import bgu.spl.mics.application.messages.TeminateBrodcast;
 import bgu.spl.mics.application.messages.TickBroadcast;
 import bgu.spl.mics.application.passiveObjects.MissionInfo;
 import bgu.spl.mics.example.messages.ExampleBroadcast;
@@ -51,9 +52,12 @@ public class Intelligence extends Subscriber {
 					Future<Boolean> future = this.getSimplePublisher().sendEvent(new MissionReceivedEvent(getName(), senderId, mission));
 				}
 			}
-			if(this.currentTimeTick >= message.getTimeToTerminate()){
-				terminate();
-			}
+		//	if(this.currentTimeTick >= message.getTimeToTerminate()){
+			//	terminate();
+		//	}
+		});
+		subscribeBroadcast(TeminateBrodcast.class, message -> {
+			terminate();
 		});
 
 	}

@@ -1,6 +1,7 @@
 package bgu.spl.mics.application.publishers;
 
 import bgu.spl.mics.Publisher;
+import bgu.spl.mics.application.messages.TerminateM;
 import bgu.spl.mics.application.messages.TickBroadcast;
 
 import java.util.concurrent.TimeUnit;
@@ -46,6 +47,7 @@ public class TimeService extends Publisher {
 				Thread.sleep(100);//ToDO add to yuval
 			}
 			System.out.println("terminated timeService " +getName());
+			getSimplePublisher().sendBroadcast(new TerminateM(true)); // ent evet toM to terminated.
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

@@ -3,6 +3,7 @@ package bgu.spl.mics.application.subscribers;
 import bgu.spl.mics.Subscriber;
 import bgu.spl.mics.application.messages.AgentsAvailableEvent;
 import bgu.spl.mics.application.messages.GadgetAvailableEvent;
+import bgu.spl.mics.application.messages.TeminateBrodcast;
 import bgu.spl.mics.application.messages.TickBroadcast;
 import bgu.spl.mics.application.passiveObjects.GadgetMissionDetail;
 import bgu.spl.mics.application.passiveObjects.Inventory;
@@ -38,10 +39,13 @@ public class Q extends Subscriber {
 		subscribeBroadcast(TickBroadcast.class, message -> {
 			currentTimeTick = message.getCurrentTime();
 			//System.out.println("Listener " + getName() + " got a new message from " + message.getSenderId() + "! (currentTimeTick: " + currentTimeTick + ")");
-			if(currentTimeTick >= message.getTimeToTerminate()){
+			//if(currentTimeTick >= message.getTimeToTerminate()){
 
-				terminate();
-			}
+			//	terminate();
+		//	}
+		});
+		subscribeBroadcast(TeminateBrodcast.class, message -> {
+			terminate();
 		});
 
 

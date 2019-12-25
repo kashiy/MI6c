@@ -36,10 +36,11 @@ public class Q extends Subscriber {
 
 		subscribeBroadcast(TickBroadcast.class, message -> {
 			currentTimeTick = message.getCurrentTime();
+			if(currentTimeTick >= message.getTimeToTerminate()){
+				terminate();
+			}
 		});
-		subscribeBroadcast(TeminateBrodcast.class, message -> {
-			terminate();
-		});
+
 
 
 		subscribeEvent(GadgetAvailableEvent.class, message -> {

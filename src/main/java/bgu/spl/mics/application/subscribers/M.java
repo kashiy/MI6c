@@ -31,6 +31,7 @@ public class M extends Subscriber {
 
 		subscribeBroadcast(TickBroadcast.class, message -> {
 			currentTimeTick = message.getCurrentTime();
+
 		});
 
 		subscribeBroadcast(TerminateM.class, message -> {
@@ -40,39 +41,26 @@ public class M extends Subscriber {
 
 
 
-
-
-
-
-
-
-
-
-
-
 		subscribeEvent(MissionReceivedEvent.class, message -> {
 			Future<AgentMissionDetail> futureAgents= getSimplePublisher().sendEvent(new AgentsAvailableEvent(message.getMission().getSerialAgentsNumbers(),getName(),this.senderId));
 			Future<GadgetMissionDetail> futureGadget;
 			Future<Boolean> futureSendOrAbort;
-			int time =(message.getMission().getTimeExpired()-message.getMission().getTimeIssued())*100;
 
 
-			if(futureAgents !=null && futureAgents.get(time,TimeUnit.MILLISECONDS)!=null && futureAgents.get().getAnswer() == true ) {
-				futureGadget= getSimplePublisher().sendEvent(new GadgetAvailableEvent(getName(),this.senderId,message.getMission().getGadget()));
-				if (futureGadget != null && futureGadget.get(time,TimeUnit.MILLISECONDS)!= null && futureGadget.get().getAnswer() == true && currentTimeTick <= message.getMission().getTimeExpired() ) {
+				if (futureAgents != null && futureAgents.get() != null && futureAgents.get().getAnswer() == true) {
+					futureGadget = getSimplePublisher().sendEvent(new GadgetAvailableEvent(getName(), this.senderId, message.getMission().getGadget()));
+					if (futureGadget != null && futureGadget.get() != null && futureGadget.get().getAnswer() == true && currentTimeTick <= message.getMission().getTimeExpired()) {
 						futureSendOrAbort = getSimplePublisher().sendEvent(new SendOrAbortAgentsEvent(getName(), this.senderId, true, message.getMission().getSerialAgentsNumbers(), message.getMission().getDuration()));
 						Report newReport = new Report();
 						writeReport(newReport, message.getMission(), futureAgents.get().getIdMoneyPenny(), futureAgents.get().getListAgentsNames(), futureGadget.get().getRecievedInQtime());
 						diary.addReport(newReport);
 
-				}
-				else {
+					} else {
+						futureSendOrAbort = getSimplePublisher().sendEvent(new SendOrAbortAgentsEvent(getName(), this.senderId, false, message.getMission().getSerialAgentsNumbers(), 0));
+					}
+				} else {
 					futureSendOrAbort = getSimplePublisher().sendEvent(new SendOrAbortAgentsEvent(getName(), this.senderId, false, message.getMission().getSerialAgentsNumbers(), 0));
 				}
-			}
-			else{
-				futureSendOrAbort= getSimplePublisher().sendEvent(new SendOrAbortAgentsEvent(getName(),this.senderId,false,message.getMission().getSerialAgentsNumbers(),0));
-			}
 
 			diary.incrementTotal();
 

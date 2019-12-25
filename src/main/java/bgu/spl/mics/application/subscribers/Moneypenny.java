@@ -22,11 +22,13 @@ public class Moneypenny extends Subscriber {
 	private Squad squad;
 	private int currentTimeTick;
 
+
 	public Moneypenny(String name, int serialID) {
 		super(name);
 		this.serialID=serialID;
 		this.squad = Squad.getInstance();
 		this.currentTimeTick=0;
+
 	}
 
 	@Override
@@ -36,6 +38,7 @@ public class Moneypenny extends Subscriber {
 
 		subscribeBroadcast(TickBroadcast.class, message -> {
 			this.currentTimeTick = message.getCurrentTime();
+
 		});
 
 		subscribeBroadcast(TeminateBrodcast.class, message -> {
@@ -49,7 +52,6 @@ public class Moneypenny extends Subscriber {
 				List<String> listAgentsNames= squad.getAgentsNames(message.getSerialAgentsNumbers());
 
 				//she do the send agnets only if M tells her OR maybe release the agents if aborted
-
 				AgentMissionDetail newDetail = new AgentMissionDetail(agentsAvailable, serialID, listAgentsNames);
 
 				complete(message, newDetail);

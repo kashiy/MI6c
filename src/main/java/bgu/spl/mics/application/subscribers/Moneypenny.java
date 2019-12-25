@@ -7,6 +7,7 @@ import bgu.spl.mics.application.passiveObjects.AgentMissionDetail;
 import bgu.spl.mics.application.passiveObjects.Report;
 import bgu.spl.mics.application.passiveObjects.Squad;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -49,9 +50,12 @@ public class Moneypenny extends Subscriber {
 				//System.out.println(getName() + " AgentsAvailableEvent " );
 				Boolean agentsAvailable = squad.getAgents(message.getSerialAgentsNumbers());
 
+				List<String> listAgentsNames= squad.getAgentsNames(message.getSerialAgentsNumbers());
+
+
 				//she do the send agnets only if M tells her OR maybe release the agents if aborted
-				//System.out.println("Event Handler " + getName() + " got a AgentsAvailableEvent from " + message.getSenderName() );
-				AgentMissionDetail newDetail = new AgentMissionDetail(agentsAvailable, serialID, squad.getAgentsNames(message.getSerialAgentsNumbers()));
+				System.out.println(Thread.currentThread().getName() +" " +"Event Handler " + getName() + " got a AgentsAvailableEvent from " + message.getSenderName() );
+				AgentMissionDetail newDetail = new AgentMissionDetail(agentsAvailable, serialID, listAgentsNames);
 
 				complete(message, newDetail);
 			});

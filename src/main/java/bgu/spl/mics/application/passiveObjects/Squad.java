@@ -52,7 +52,9 @@ public class Squad {
 	 */
 	public synchronized void releaseAgents(List<String> serials){
 		for(String serial: serials) {
+			if (agentsMAP.get(serial) != null) {
 				agentsMAP.get(serial).release();
+			}
 		}
 		notifyAll();
 	}
@@ -86,6 +88,7 @@ public class Squad {
 	 * @return ‘false’ if an agent of serialNumber ‘serial’ is missing, and ‘true’ otherwise
 	 */
 	public synchronized boolean getAgents(List<String> serials) throws InterruptedException { //need to check if another sync is ok
+
 		for(String serial: serials){
 			if (agentsMAP.get(serial) == null){
 				return false;
@@ -107,6 +110,9 @@ public class Squad {
     public List<String> getAgentsNames(List<String> serials){
 		List<String> agentsNames= new LinkedList<String>();
 		for(String serial: serials) {
+			if (agentsMAP.get(serial) == null){
+				return null;
+			}
 			agentsNames.add(agentsMAP.get(serial).getName());
 		}
 		return agentsNames;

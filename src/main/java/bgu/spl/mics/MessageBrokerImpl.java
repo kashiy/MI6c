@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
+@SuppressWarnings("unchecked")
 
 /**
  * The {@link MessageBrokerImpl class is the implementation of the MessageBroker interface.

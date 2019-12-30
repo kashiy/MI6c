@@ -17,7 +17,7 @@
                         "serialAgentsNumbers": ["007"],
                         "duration": 4,
                         "gadget": "Pistol",
-                        "missionName": "Land of Riches",
+                        "name": "Land of Riches",
                         "timeExpired": 5,
                         "timeIssued": 2
                     },
@@ -25,7 +25,7 @@
                         "serialAgentsNumbers": ["007"],
                         "duration": 10,
                         "gadget": "Sky Hook",
-                        "missionName": "Thunderball",
+                        "name": "Thunderball",
                         "timeExpired": 15,
                         "timeIssued": 3
                     },
@@ -33,7 +33,7 @@
                         "serialAgentsNumbers": ["007"],
                         "duration": 2,
                         "gadget": "Dagger shoe",
-                        "missionName": "From Russia With Love",
+                        "name": "From Russia With Love",
                         "timeExpired": 7,
                         "timeIssued": 5
                     },
@@ -41,7 +41,7 @@
                         "serialAgentsNumbers": ["006", "007"],
                         "duration": 2,
                         "gadget": "Knife",
-                        "missionName": "Ashan",
+                        "name": "Ashan",
                         "timeExpired": 18,
                         "timeIssued": 7
                     },
@@ -49,7 +49,7 @@
                         "serialAgentsNumbers": ["007"],
                         "duration": 2,
                         "gadget": "Tank",
-                        "missionName": "Biara's Castle",
+                        "name": "Biara's Castle",
                         "timeExpired": 18,
                         "timeIssued": 9
                     }

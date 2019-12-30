@@ -13,7 +13,7 @@
             "serialAgentsNumbers": ["007"],
             "duration": 10,
             "gadget": "Sky Hook",
-            "missionName": "Thunderball",
+            "name": "Thunderball",
             "timeExpired": 15,
             "timeIssued": 3
           },
@@ -21,7 +21,7 @@
             "serialAgentsNumbers": ["007"],
             "duration": 2,
             "gadget": "Dagger shoe",
-            "missionName": "From Russia With Love",
+            "name": "From Russia With Love",
             "timeExpired": 18,
             "timeIssued": 5
           }

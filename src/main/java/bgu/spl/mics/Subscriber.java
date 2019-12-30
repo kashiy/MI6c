@@ -2,6 +2,7 @@ package bgu.spl.mics;
 
 import java.util.HashMap;
 import java.util.Map;
+@SuppressWarnings("unchecked")
 
 /**
  * The Subscriber is an abstract class that any subscriber in the system

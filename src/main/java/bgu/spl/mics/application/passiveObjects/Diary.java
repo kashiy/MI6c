@@ -8,8 +8,8 @@ import com.google.gson.JsonElement;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -32,7 +32,7 @@ public class Diary {
 
 
 	private Diary(){
-		reports = new CopyOnWriteArrayList<Report>();
+		reports = new LinkedList<Report>();
 		total=0;
 		incrementTotal= new AtomicInteger(0);
 	}
@@ -52,7 +52,7 @@ public class Diary {
 	 * adds a report to the diary
 	 * @param reportToAdd - the report to add
 	 */
-	public void addReport(Report reportToAdd){
+	public synchronized void addReport(Report reportToAdd){
 		reports.add(reportToAdd);
 	}
 

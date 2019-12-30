@@ -81,7 +81,7 @@ public class MI6Runner {
                     int duration = element2.getAsJsonObject().get("duration").getAsInt();
                     int timeExpired = element2.getAsJsonObject().get("timeExpired").getAsInt();
                     int timeIssued = element2.getAsJsonObject().get("timeIssued").getAsInt();
-                    String missionName = element2.getAsJsonObject().get("missionName").getAsString();
+                    String missionName = element2.getAsJsonObject().get("name").getAsString();
                     String gadget = element2.getAsJsonObject().get("gadget").getAsString();
                     MissionInfo missionCreated = new MissionInfo();
                     missionCreated.setGadget(gadget);
